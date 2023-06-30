@@ -1,0 +1,22 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 30rem;
+  width: 100%;
+  margin-inline: auto;
+  gap: 1.25rem;
+  height: 100vh;
+  > * {
+    flex: 0;
+  }
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  a {
+    flex-grow: 1;
+  }
+}

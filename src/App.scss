@@ -1,0 +1,10 @@
+.header {
+  background-color: black;
+  &_name {
+    color: white !important;
+  }
+}
+
+.main {
+  margin-top: 3rem !important;
+}
