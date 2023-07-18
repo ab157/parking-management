@@ -1,0 +1,101 @@
+[
+  {
+    "id": 1,
+    "first_name": "Sidonnie",
+    "last_name": "Santacrole",
+    "email": "ssantacrole0@feedburner.com",
+    "contact": "+66 481 563 1894",
+    "password": "$2a$04$dEGGHWlHBPJPzJB9cRgW.uQ4jVuEZC6BeUWEeiOvgwXWJearcoYuy",
+    "role": "user"
+  },
+  {
+    "id": 2,
+    "first_name": "Valencia",
+    "last_name": "Nelhams",
+    "email": "vnelhams1@unblog.fr",
+    "contact": "+55 664 617 0167",
+    "password": "$2a$04$0qQGfNYtkOZSz2lGLnnmau2IUFPEnmQ49wD7aRBNL8MB2yUoJlOv2",
+    "role": "user"
+  },
+  {
+    "id": 3,
+    "first_name": "Roderigo",
+    "last_name": "Gallard",
+    "email": "rgallard2@studiopress.com",
+    "contact": "+62 459 877 6624",
+    "password": "$2a$04$K1gjVSLd8V7Q9SQEUnUvL.yD2V5kBYrVyqgDEekZJ3R1XnWYaJhwK",
+    "role": "user"
+  },
+  {
+    "id": 4,
+    "first_name": "Mozelle",
+    "last_name": "Trask",
+    "email": "mtrask3@miibeian.gov.cn",
+    "contact": "+86 773 380 6896",
+    "password": "$2a$04$fSGXq0HrnRlOdgmK0/lUOOaEKfypnjm37MRos9MOHugOchtp.WeRS",
+    "role": "user"
+  },
+  {
+    "id": 5,
+    "first_name": "Joni",
+    "last_name": "Arons",
+    "email": "jarons4@weibo.com",
+    "contact": "+7 642 636 9423",
+    "password": "$2a$04$hf07RXRNKfCCF4xj7PUW1uPf8G.znN3Sx6X6EKZnbr7I5gNbTdj7W",
+    "role": "user"
+  },
+  {
+    "id": 6,
+    "first_name": "Gweneth",
+    "last_name": "Deas",
+    "email": "gdeas5@house.gov",
+    "contact": "+966 860 750 4034",
+    "password": "$2a$04$CQ/JDSbyXzSBDeBkOKVfrONT0QTmnHx7.i9HClsfLgMc0C3Gi4tCC",
+    "role": "user"
+  },
+  {
+    "id": 7,
+    "first_name": "Rurik",
+    "last_name": "Woan",
+    "email": "rwoan6@oakley.com",
+    "contact": "+1 480 240 1114",
+    "password": "$2a$04$5ezIQF2Awng3ixOelvRj7.UxSTWEUNP6gKOXafG06IF8yUVeGkL0i",
+    "role": "Admin"
+  },
+  {
+    "id": 8,
+    "first_name": "Lindsey",
+    "last_name": "Wimsett",
+    "email": "lwimsett7@ehow.com",
+    "contact": "+234 144 738 4298",
+    "password": "$2a$04$SmQr60MSjnd/rEiGk5TNRe6OlDdzd7Mk9xyVzPurJyeuAVXHitQwa",
+    "role": "user"
+  },
+  {
+    "id": 9,
+    "first_name": "Anatole",
+    "last_name": "Jereatt",
+    "email": "ajereatt8@craigslist.org",
+    "contact": "+55 455 920 5630",
+    "password": "$2a$04$H/6wEEzjyIGb8OzGLFV7jeKXWn2smfot3GP2xblI0iyuv0.CEObGe",
+    "role": "Admin"
+  },
+  {
+    "id": 10,
+    "first_name": "Merline",
+    "last_name": "Villaron",
+    "email": "mvillaron9@telegraph.co.uk",
+    "contact": "+62 521 612 9703",
+    "password": "$2a$04$9NTgmE08fEQPVa5umE14aOUSe1EZsb9JeW3hcMmD0LZXi1Ipgc/eq",
+    "role": "user"
+  },
+  {
+    "id": 11,
+    "first_name": "Abhik",
+    "last_name": "Khan",
+    "email": "abhik@gmail.com",
+    "contact": "+91 123 456 7898",
+    "password": "Abhik@123",
+    "role": "user"
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "1HC54",
+    "userId": "1",
+    "carNo": "2G4WD582X71445566",
+    "parkingFrom": "2023-07-02T10:45:01Z",
+    "parkingTo": "2023-07-02T00:18:37Z",
+    "parkingFromTime": "1:30 PM",
+    "parkingToTime": "2:30 PM",
+    "parkingSlot": "P1A"
+  },
+  {
+    "id": "54KD9",
+    "userId": "2",
+    "carNo": "4A31K5DF2CE390100",
+    "parkingFrom": "2023-07-02T10:15:52Z",
+    "parkingTo": "2023-07-02T23:54:21Z",
+    "parkingFromTime": "3:00 PM",
+    "parkingToTime": "4:30 PM",
+    "parkingSlot": "P1B"
+  },
+  {
+    "id": "8A4B6",
+    "userId": "3",
+    "carNo": "JN8AZ1MU0DW629973",
+    "parkingFrom": "2023-07-02T14:06:49Z",
+    "parkingTo": "2023-07-02T06:48:42Z",
+    "parkingFromTime": "5:15 PM",
+    "parkingToTime": "7:30 PM",
+    "parkingSlot": "P1C"
+  },
+  {
+    "id": "0F4H2",
+    "userId": "4",
+    "carNo": "1G4GB5GR9EF611817",
+    "parkingFrom": "2023-07-02T12:29:26Z",
+    "parkingTo": "2023-07-02T01:10:33Z",
+    "parkingFromTime": "7:35 PM",
+    "parkingToTime": "8:30 AM",
+    "parkingSlot": "P1D"
+  },
+  {
+    "id": "2Z7G3",
+    "userId": "5",
+    "carNo": "1N4AL2AP7CC700190",
+    "parkingFrom": "2023-07-02T10:04:20Z",
+    "parkingTo": "2023-07-02T14:24:23Z",
+    "parkingFromTime": "12:30 AM",
+    "parkingToTime": "9:30 AM",
+    "parkingSlot": "P1E"
+  },
+  {
+    "id": "4S2K9",
+    "userId": "6",
+    "carNo": "WBANF33556C136139",
+    "parkingFrom": "2023-07-02T04:07:57Z",
+    "parkingTo": "2023-07-02T02:36:31Z",
+    "parkingFromTime": "10:30 AM",
+    "parkingToTime": "11:30 AM",
+    "parkingSlot": "P1F"
+  },
+  {
+    "id": "5LS87",
+    "userId": "7",
+    "carNo": "55SWF4JB0FU838148",
+    "parkingFrom": "2023-07-02T07:04:05Z",
+    "parkingTo": "2023-07-02T03:48:53Z",
+    "parkingFromTime": "09:30 AM",
+    "parkingToTime": "10:00 AM",
+    "parkingSlot": "P1G"
+  },
+  {
+    "id": "7AQ0J",
+    "userId": "8",
+    "carNo": "1FMCU0F79EU524584",
+    "parkingFrom": "2023-07-02T20:12:36Z",
+    "parkingTo": "2023-07-02T12:54:07Z",
+    "parkingFromTime": "10:30 AM",
+    "parkingToTime": "3:30 PM",
+    "parkingSlot": "P1H"
+  },
+  {
+    "id": "9I9P4",
+    "userId": "9",
+    "carNo": "19UYA41713A330961",
+    "parkingFrom": "2023-07-02T18:38:57Z",
+    "parkingTo": "2023-07-02T17:04:00Z",
+    "parkingFromTime": "9:30 PM",
+    "parkingToTime": "11:30 AM",
+    "parkingSlot": "P1I"
+  }
+]

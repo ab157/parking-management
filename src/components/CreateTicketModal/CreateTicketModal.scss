@@ -1,0 +1,23 @@
+.dateGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > div {
+    flex: 1 0 50%;
+  }
+}
+
+.input {
+  &:not(:first-of-type) {
+    margin-top: 1rem;
+  }
+}
+
+.cds--date-picker {
+  gap: 1rem !important;
+}
+
+.time-picker {
+  display: flex;
+}

@@ -1,63 +1,100 @@
-import { useState } from "react";
-import { TextInput, Button } from "@carbon/react";
-import { Form } from "react-router-dom";
-import "./Login.scss";
+import { useEffect, useState } from "react";
+import {
+  TextInput,
+  Button,
+  InlineNotification,
+  PasswordInput,
+} from "@carbon/react";
+import { Form, useNavigate, redirect } from "react-router-dom";
 import validator from "validator";
+import { useAuthContext } from "../../context/AuthContext";
+import "./Login.scss";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState("");
   const [isEmail, setIsEmail] = useState(true);
-  const [password, setPassword] = useState(null);
-  const [isPassword, setIsPassword] = useState(true);
+  const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+  const { setUser } = useAuthContext();
+
+  useEffect(() => {
+    fetch("http://localhost:3031/users")
+      .then((res) => res.json())
+      .then((data) => setUsers(data));
+  }, []);
+
+  const verifyUser = (email) => {
+    return users.filter((user) => user.email === email);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const existingUser = verifyUser(email);
+    if (existingUser.length === 0) {
+      setIsError(true);
+      setError("Invalid Credentials");
+    } else {
+      localStorage.setItem("user", JSON.stringify(existingUser[0]));
+      setUser(existingUser[0]);
+      redirect("/tickets");
+    }
+
+    setEmail("");
+    setPassword("");
   };
 
   return (
-    <Form className="login-form" onSubmit={handleSubmit}>
-      <TextInput
-        id="email"
-        labelText="Enter Email :"
-        placeholder="enter your email id"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-          setIsEmail(validator.isEmail(e.target.value));
-        }}
-        invalid={!isEmail}
-        invalidText={!isEmail && "The email you entered is invalid"}
-      />
+    <>
+      <Form className="login-form" onSubmit={handleSubmit}>
+        {isError && (
+          <InlineNotification
+            kind="error"
+            title="Error"
+            subtitle={error}
+            lowContrast={true}
+            onCloseButtonClick={() => {
+              setError("");
+              setIsError(false);
+            }}
+          />
+        )}
+        <TextInput
+          id="email"
+          labelText="Enter Email :"
+          placeholder="enter your email id"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setIsEmail(validator.isEmail(e.target.value));
+          }}
+          invalid={!isEmail}
+          invalidText={!isEmail && "The email you entered is invalid"}
+        />
 
-      <TextInput
-        id="password"
-        labelText="Enter password :"
-        placeholder="enter password"
-        value={password}
-        onChange={(e) => {
-          setPassword(e.target.value);
-          setIsPassword(validator.isStrongPassword(e.target.value));
-        }}
-        invalid={!isPassword}
-        invalidText={!isPassword && "The password you entered is invalid"}
-      />
+        <PasswordInput
+          id="password"
+          labelText="Enter password :"
+          placeholder="enter password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
 
-      <div className="button-group">
-        <Button
-          href="/dashboard"
-          type="submit"
-          kind="primary"
-          disabled={!email || !password}
-          as="a"
-        >
-          LogIn
-        </Button>
+        <div className="button-group">
+          <Button type="submit" kind="primary" disabled={!email || !password}>
+            LogIn
+          </Button>
 
-        <Button as="a" href="/signup" kind="secondary">
-          SignUp
-        </Button>
-      </div>
-    </Form>
+          <Button onClick={() => navigate("/signup")} kind="secondary">
+            SignUp
+          </Button>
+        </div>
+      </Form>
+    </>
   );
 };
 

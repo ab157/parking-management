@@ -4,8 +4,9 @@ import "./index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import LoginForm from "./components/Login/Login";
-import Dashboard from "./components/Dashboard/Dashboard";
 import SignupForm from "./components/Signup/Signup";
+import { AuthProvider } from "./context/AuthContext";
+import TicketPage from "./components/TIcketPage/TicketPage";
 
 const router = createBrowserRouter([
   {
@@ -14,27 +15,25 @@ const router = createBrowserRouter([
     errorElement: <div>Error 404</div>,
     children: [
       {
-        path: "/create",
-        element: <div>Create user</div>,
+        path: "/login",
+        element: <LoginForm />,
       },
       {
-        path: "/dashboard",
-        element: <Dashboard />,
+        path: "/signup",
+        element: <SignupForm />,
+      },
+      {
+        path: "tickets",
+        element: <TicketPage />,
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <LoginForm />,
-  },
-  {
-    path: "/signup",
-    element: <SignupForm />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
