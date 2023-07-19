@@ -23,3 +23,18 @@ export const createNewTicket = async (ticket, cb) => {
     cb(err.message, null);
   }
 };
+
+export const editTicket = async (updatedTicket, cb) => {
+  try {
+    await fetch(`http://localhost:3031/tickets/${updatedTicket.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(updatedTicket),
+    });
+    cb(null, updatedTicket);
+  } catch (err) {
+    cb(err.message, null);
+  }
+};

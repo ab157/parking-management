@@ -5,46 +5,79 @@ import {
   DatePickerInput,
   TextInput,
   Dropdown,
-  TimePicker,
+  // TimePicker,
 } from "@carbon/react";
 import PropTypes from "prop-types";
+import { useEffect } from "react";
+import { useState } from "react";
+import { editTicket } from "../../utils/tickets";
 
 const parkingSlots = [
   {
+    id: "P1A",
     label: "P1A",
-    value: "P1A",
   },
   {
+    id: "P1B",
     label: "P1B",
-    value: "P1B",
   },
   {
+    id: "P1C",
     label: "P1C",
-    value: "P1C",
   },
   {
+    id: "P1D",
     label: "P1D",
-    value: "P1D",
   },
   {
+    id: "P1E",
     label: "P1E",
-    value: "P1E",
   },
   {
+    id: "P1F",
     label: "P1F",
-    value: "P1F",
   },
   {
+    id: "P1G",
     label: "P1G",
-    value: "P1G",
   },
   {
+    id: "P1I",
     label: "P1I",
-    value: "P1I",
   },
 ];
 
 export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
+  const [ticketToUpdate, setTicketToUpdate] = useState();
+
+  useEffect(() => {
+    setTicketToUpdate({
+      ...ticket,
+    });
+  }, [ticket]);
+
+  function handleChange(field, value) {
+    setTicketToUpdate((prev) => {
+      return {
+        ...prev,
+        [field]: value,
+      };
+    });
+  }
+
+  function handleParkingSlotChange(e) {
+    setTicketToUpdate((prev) => {
+      return {
+        ...prev,
+        parkingSlot: e.selectedItem.label,
+      };
+    });
+  }
+
+  function handleEditTicket() {
+    editTicket(ticketToUpdate, (err, ticket) => console.log(ticket));
+  }
+
   return (
     <Modal
       size="md"
@@ -53,50 +86,70 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
       modalHeading="Edit Ticket"
       primaryButtonText="Update"
       secondaryButtonText="Cancel"
+      onRequestSubmit={handleEditTicket}
     >
       <ModalBody>
         <TextInput
           id="carNo"
+          name="carNo"
           className="input"
           labelText="Car No"
           placeholder="Enter car No"
-          value={ticket.carNo}
+          value={ticketToUpdate?.carNo}
+          onChange={(e) => handleChange("carNo", e.target.value)}
         />
-        <DatePicker className="input" datePickerType="range">
+        <DatePicker
+          className="input"
+          datePickerType="single"
+          name="parkingFrom"
+          onChange={(date) => handleChange("parkingFrom", date[0])}
+          value={ticketToUpdate?.parkingFrom}
+        >
           <DatePickerInput
-            labelText="Parking from date"
-            placeholder="mm/dd/yyyy"
+            id="parkingFrom"
+            labelText="Parking from"
+            placeholder="mm/dd/yy"
             size="md"
-            value={ticket.parkingFrom}
-          />
-          <DatePickerInput
-            labelText="Parking from date"
-            placeholder="mm/dd/yyyy"
-            size="md"
-            value={ticket.parkingTo}
           />
         </DatePicker>
-        <div className="time-picker">
+        <DatePicker
+          className="input"
+          name="parkingTo"
+          datePickerType="single"
+          onChange={(date) => handleChange("parkingTo", date[0])}
+          value={ticketToUpdate?.parkingTo}
+        >
+          <DatePickerInput
+            id="parkingTo"
+            labelText="Parking Till"
+            placeholder="mm/dd/yy"
+            size="md"
+          />
+        </DatePicker>
+        {/* <div className="time-picker">
           <TimePicker
             id="fromTime"
+            name="timeFrom"
             labelText=""
-            value={ticket.parkingFromTime}
+            value={ticketToUpdate?.parkingFromTime}
             timeFormat="12"
           />
           <TimePicker
             id="toTime"
+            name="timeTo"
             labelText=""
-            value={ticket.parkingToTime}
+            value={ticketToUpdate?.parkingToTime}
             timeFormat="12"
           />
-        </div>
+        </div> */}
         <Dropdown
           id="parkingSlot"
-          selectedItem={ticket.parkingSlot}
+          name="parkingSlot"
+          selectedItem={ticketToUpdate?.parkingSlot}
           items={parkingSlots}
           label="Select Parking Slot"
           titleText="Parking Slot"
-          required
+          onChange={handleParkingSlotChange}
         />
       </ModalBody>
     </Modal>

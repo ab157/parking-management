@@ -3,10 +3,10 @@
     {
       "id": "e3ebde33-8827-4483-89ab-3bf07682dbfc",
       "userId": "1",
-      "carNo": "MH12AB2345",
-      "parkingFrom": "2023-07-17T18:30:00.000Z",
-      "parkingTo": "2023-07-19T18:30:00.000Z",
-      "parkingSlot": "P1D"
+      "carNo": "MH30ZZ9999",
+      "parkingFrom": "2023-07-19T18:30:00.000Z",
+      "parkingTo": "2023-07-21T18:30:00.000Z",
+      "parkingSlot": "P1A"
     },
     {
       "id": "fbbddc77-0a34-4e53-99d9-04d2c6187e38",
@@ -26,7 +26,7 @@
     },
     {
       "id": "10168e1a-168e-4fae-b2ec-1890be01d2cc",
-      "userId": 1,
+      "userId": "1",
       "carNo": "MH20BH2023",
       "parkingFrom": "2023-07-17T18:30:00.000Z",
       "parkingTo": "2023-07-19T18:30:00.000Z",

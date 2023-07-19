@@ -94,7 +94,7 @@ const TicketDataTable = () => {
               <Button
                 kind="ghost"
                 onClick={() => {
-                  setSelectedTicket(item.id);
+                  setSelectedTicket(item);
                   setEditModalOpen(true);
                 }}
               >
@@ -127,9 +127,6 @@ const TicketDataTable = () => {
 
   useEffect(() => {
     if (sessionUser) {
-      // fetch("http://localhost:3031/tickets")
-      //   .then((res) => res.json())
-      //   .then((data) => setTickets(data));
       getTickets((err, data) => setTickets(data));
     }
   }, [sessionUser]);
@@ -145,8 +142,6 @@ const TicketDataTable = () => {
   useEffect(() => {
     setFormattedTickets(formatTickets(tickets, sessionUser));
   }, [sessionUser, tickets, formatTickets]);
-
-  console.log(getHeadersForTicketsTable(sessionUser?.role));
 
   return (
     <div>
