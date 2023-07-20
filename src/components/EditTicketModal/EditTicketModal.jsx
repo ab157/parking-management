@@ -71,6 +71,7 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
           className="input"
           datePickerType="single"
           name="parkingFrom"
+          minDate={ticketToUpdate?.parkingFrom}
           onChange={(date) => handleChange("parkingFrom", date[0])}
           value={ticketToUpdate?.parkingFrom}
         >
@@ -85,6 +86,7 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
           className="input"
           name="parkingTo"
           datePickerType="single"
+          minDate={ticketToUpdate?.parkingFrom}
           onChange={(date) => handleChange("parkingTo", date[0])}
           value={ticketToUpdate?.parkingTo}
         >

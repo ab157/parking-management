@@ -123,7 +123,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       <DatePicker
         className="input"
         datePickerType="single"
-        // minDate={new Date().toISOString()}
+        minDate={new Date()}
         onChange={(date) => {
           setParkingFrom(date[0]);
         }}
@@ -138,7 +138,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       <DatePicker
         className="input"
         datePickerType="single"
-        // minDate={new Date().toISOString()}
+        minDate={new Date(parkingFrom)}
         onChange={(date) => setParkingTo(date[0])}
       >
         <DatePickerInput
