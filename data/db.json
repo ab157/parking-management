@@ -91,6 +91,30 @@
       "user": {
         "name": "Rajiv Sarkar"
       }
+    },
+    {
+      "id": "b00a9055-f13d-44d9-83b4-71f0461320a6",
+      "userId": "1669829a-dbee-4a45-97af-97424487d9d7",
+      "carNo": "MH46AZ0001",
+      "parkingFrom": "2023-07-21T18:30:00.000Z",
+      "parkingTo": "2023-07-22T18:30:00.000Z",
+      "parkingSlot": "P1I"
+    },
+    {
+      "id": "32f80798-fec8-49b5-9628-5c3e500b5b62",
+      "userId": "1669829a-dbee-4a45-97af-97424487d9d7",
+      "carNo": "MH99QW1234",
+      "parkingFrom": "2023-07-20T18:30:00.000Z",
+      "parkingTo": "2023-07-22T18:30:00.000Z",
+      "parkingSlot": "P1E"
+    },
+    {
+      "id": "79447bef-5d5a-4041-b80a-219a7af51769",
+      "userId": "1669829a-dbee-4a45-97af-97424487d9d7",
+      "carNo": "MH99JJ9999",
+      "parkingFrom": "2023-07-22T18:30:00.000Z",
+      "parkingTo": "2023-07-24T18:30:00.000Z",
+      "parkingSlot": "P1C"
     }
   ],
   "users": [

@@ -10,42 +10,7 @@ import {
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useState } from "react";
-import { editTicket } from "../../utils/tickets";
-
-const parkingSlots = [
-  {
-    id: "P1A",
-    label: "P1A",
-  },
-  {
-    id: "P1B",
-    label: "P1B",
-  },
-  {
-    id: "P1C",
-    label: "P1C",
-  },
-  {
-    id: "P1D",
-    label: "P1D",
-  },
-  {
-    id: "P1E",
-    label: "P1E",
-  },
-  {
-    id: "P1F",
-    label: "P1F",
-  },
-  {
-    id: "P1G",
-    label: "P1G",
-  },
-  {
-    id: "P1I",
-    label: "P1I",
-  },
-];
+import { editTicket, parkingSlots } from "../../utils/tickets";
 
 export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
   const [ticketToUpdate, setTicketToUpdate] = useState();

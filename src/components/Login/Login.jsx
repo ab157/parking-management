@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   TextInput,
   Button,
@@ -9,7 +9,7 @@ import { Form, useNavigate, redirect } from "react-router-dom";
 import validator from "validator";
 import { useAuthContext } from "../../context/AuthContext";
 import "./Login.scss";
-import bcrypt from "bcryptjs";
+import { loginUser } from "../../utils/users";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -17,34 +17,23 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
-  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const { setUser } = useAuthContext();
 
-  useEffect(() => {
-    fetch("http://localhost:3031/users")
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-  }, []);
-
-  const verifyUser = (email, password) => {
-    return users.find(
-      (user) =>
-        user.email === email && bcrypt.compareSync(password, user.password)
-    );
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const existingUser = verifyUser(email, password);
-    if (!existingUser) {
-      setIsError(true);
-      setError("Invalid Credentials");
-    } else {
-      localStorage.setItem("user", JSON.stringify(existingUser));
-      setUser(existingUser);
-      redirect("/tickets");
-    }
+    loginUser({ email, password }, (err, user) => {
+      if (err) {
+        setIsError(true);
+        setError(err.message);
+      }
+      // If no error in login, then proceed
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
+      setTimeout(() => {
+        redirect("/tickets");
+      }, 1500);
+    });
 
     setEmail("");
     setPassword("");

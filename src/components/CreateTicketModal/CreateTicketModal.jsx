@@ -1,6 +1,5 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-
 import {
   Modal,
   TextInput,
@@ -11,47 +10,11 @@ import {
   Dropdown,
   // TimePicker,
 } from "@carbon/react";
-
+import { useAuthContext } from "../../context/AuthContext";
+import { createNewTicket, parkingSlots } from "../../utils/tickets";
+import { redirect } from "react-router-dom";
 // CSS
 import "./CreateTicketModal.scss";
-import { v4 as uuidv4 } from "uuid";
-import { useAuthContext } from "../../context/AuthContext";
-import { createNewTicket } from "../../utils/tickets";
-
-const parkingSlots = [
-  {
-    label: "P1A",
-    value: "P1A",
-  },
-  {
-    label: "P1B",
-    value: "P1B",
-  },
-  {
-    label: "P1C",
-    value: "P1C",
-  },
-  {
-    label: "P1D",
-    value: "P1D",
-  },
-  {
-    label: "P1E",
-    value: "P1E",
-  },
-  {
-    label: "P1F",
-    value: "P1F",
-  },
-  {
-    label: "P1G",
-    value: "P1G",
-  },
-  {
-    label: "P1I",
-    value: "P1I",
-  },
-];
 
 export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [carNo, setCarNo] = useState("");
@@ -61,12 +24,11 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [forWhom, setForWhom] = useState("");
   const [userName, setUserName] = useState("");
   const [carNoError, setCarNoError] = useState("");
-  const { user } = useAuthContext();
+  const { user: sessionUser } = useAuthContext();
 
   const handleCreateTicket = () => {
     let ticket = {
-      id: uuidv4(),
-      userId: user.id,
+      userId: sessionUser?.id,
       carNo,
       parkingFrom,
       parkingTo,
@@ -81,7 +43,15 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       };
     }
 
-    createNewTicket(ticket, (err, status) => console.log(status));
+    createNewTicket(ticket, (err, status) => {
+      if (err) {
+        return;
+      }
+      if (status === 201) {
+        onClose();
+      }
+    });
+    redirect("/tickets");
   };
 
   const handleCarNoChange = (e) => {

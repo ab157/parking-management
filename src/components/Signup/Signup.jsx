@@ -8,9 +8,9 @@ import {
   Dropdown,
   PasswordInput,
 } from "@carbon/react";
-import { v4 as uuidv4 } from "uuid";
-import bcrypt from "bcryptjs";
+
 import "./Signup.scss";
+import { signUpUser } from "../../utils/users";
 
 const SignupForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -55,19 +55,17 @@ const SignupForm = () => {
       setError("User already exists");
     } else {
       newUser = {
-        id: uuidv4(),
         first_name: firstName,
         last_name: lastName,
         email,
-        password: hashPassword(password, 10),
+        password,
         role,
       };
       // Create new user in backend
-      createUser(newUser);
-      // Save in localstorage
-      // localStorage.setItem("user", JSON.stringify(newUser));
+      signUpUser(newUser);
       // Creation Successful
       setIsCreated(true);
+      // Clear all inputs
       clearAllInputs();
       // Navigate
       setTimeout(() => {
@@ -75,25 +73,6 @@ const SignupForm = () => {
       }, 1500);
     }
   };
-
-  function hashPassword(password, rounds) {
-    const hashedPassword = bcrypt.hashSync(password, rounds);
-    return hashedPassword;
-  }
-
-  async function createUser(user) {
-    try {
-      await fetch("http://localhost:3031/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   return (
     <Form className="signup-form" onSubmit={handleSignUp}>

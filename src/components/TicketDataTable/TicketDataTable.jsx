@@ -14,7 +14,8 @@ import {
   TableToolbarSearch,
   Link,
 } from "@carbon/react";
-import { Edit } from "@carbon/icons-react";
+import { NoDataEmptyState } from "@carbon/ibm-products/lib/components";
+import { Edit, Add } from "@carbon/icons-react";
 import CreateTicketModal from "../CreateTicketModal/CreateTicketModal";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { format } from "date-fns";
@@ -22,48 +23,8 @@ import TicketDetailsModal from "../TicketDetailsModal/TicketDetailsModal";
 import "./TicketDataTable.scss";
 import EditTicketModal from "../EditTicketModal/EditTicketModal";
 import { AuthContext } from "../../context/AuthContext";
-import { getTickets } from "../../utils/tickets";
-
-function getHeadersForTicketsTable(userRole) {
-  let headers = [
-    {
-      key: "id",
-      header: "Ticket ID",
-    },
-    {
-      key: "carNo",
-      header: "Car No",
-    },
-    {
-      key: "parkingFrom",
-      header: "Parking From",
-    },
-    {
-      key: "parkingTo",
-      header: "Parking To",
-    },
-    {
-      key: "parkingSlot",
-      header: "Parking Slot",
-    },
-    {
-      key: "actions",
-      header: "",
-    },
-  ];
-
-  if (userRole !== "USER") {
-    headers = [
-      ...headers.slice(0, headers.length - 1),
-      {
-        key: "userName",
-        header: "User Name",
-      },
-      headers[headers.length - 1],
-    ];
-  }
-  return headers;
-}
+import { getHeadersForTicketsTable, getTickets } from "../../utils/tickets";
+import { getUserById } from "../../utils/users";
 
 const TicketDataTable = () => {
   const [tickets, setTickets] = useState([]);
@@ -75,73 +36,101 @@ const TicketDataTable = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const { user: sessionUser } = useContext(AuthContext);
 
-  const handleTicketClick = (ticketId) => {
-    const ticket = tickets.filter((item) => item.id === ticketId)[0];
-    setSelectedTicket(ticket);
-    setDetailsModalOpen(true);
-  };
-
-  const formatTickets = useCallback(
-    (tickets, user) => {
-      let modifiedTickets = [];
-      modifiedTickets = tickets.map((item) => {
-        return {
-          ...item,
-          parkingFrom: format(new Date(item.parkingFrom), "dd/MM/yy"),
-          parkingTo: format(new Date(item.parkingTo), "dd/MM/yy "),
-          actions: (
-            <div>
-              <Button
-                kind="ghost"
-                onClick={() => {
-                  setSelectedTicket(item);
-                  setEditModalOpen(true);
-                }}
-              >
-                <Edit />
-              </Button>
-            </div>
-          ),
-        };
-      });
-
-      if (user?.role === "USER") {
-        modifiedTickets = modifiedTickets.filter(
-          (item) => item.userId === user.id
-        );
-      } else {
-        modifiedTickets = modifiedTickets.map((item) => {
-          const user = users.find((user) => user.id === item.userId);
-          const userName = user ? `${user?.first_name} ${user?.last_name}` : "";
-          return {
-            ...item,
-            userName,
-          };
-        });
-      }
-
-      return modifiedTickets;
+  const handleTicketClick = useCallback(
+    (ticketId) => {
+      const ticket = tickets.filter((item) => item.id === ticketId)[0];
+      setSelectedTicket(ticket);
+      setDetailsModalOpen(true);
     },
-    [users]
+    [tickets]
   );
 
+  const formatTickets = useCallback((tickets, user) => {
+    let modifiedTickets = [];
+    modifiedTickets = tickets.map((item) => {
+      return {
+        ...item,
+        parkingFrom: format(new Date(item.parkingFrom), "dd/MM/yy"),
+        parkingTo: format(new Date(item.parkingTo), "dd/MM/yy "),
+        actions: (
+          <div>
+            <Button
+              kind="ghost"
+              onClick={() => {
+                setSelectedTicket(item);
+                setEditModalOpen(true);
+              }}
+            >
+              <Edit />
+            </Button>
+          </div>
+        ),
+      };
+    });
+
+    if (user?.role === "ADMIN") {
+      modifiedTickets = modifiedTickets.map((item) => {
+        const user = getUserById(item?.userId);
+        const userName = user ? `${user?.first_name} ${user?.last_name}` : "";
+        return {
+          ...item,
+          userName,
+        };
+      });
+    }
+
+    return modifiedTickets;
+  }, []);
+
+  const getEmptyDataTable = useCallback(() => {
+    return {
+      id: "",
+      userId: "",
+      carNo: (
+        <NoDataEmptyState
+          size="lg"
+          className="tickets_noDataState"
+          action={{
+            onClick: () => setCreateModalOpen(true),
+            renderIcon: Add,
+            iconDescription: "Add icon",
+            text: "Create Ticket",
+          }}
+          subtitle="Create new Ticket"
+          title="No Ticket"
+        />
+      ),
+      parkingFrom: "",
+      parkingTo: "",
+      parkingSlot: "",
+      actions: " ",
+    };
+  }, []);
+
   useEffect(() => {
     if (sessionUser) {
-      getTickets((err, data) => setTickets(data));
+      getTickets((err, tickets) => {
+        if (err) {
+          return;
+        }
+        if (sessionUser?.role === "USER") {
+          setTickets(
+            tickets.filter((ticket) => ticket.userId === sessionUser?.id)
+          );
+        } else {
+          setTickets(tickets);
+        }
+      });
     }
   }, [sessionUser]);
 
   useEffect(() => {
-    if (sessionUser) {
-      fetch("http://localhost:3031/users")
-        .then((res) => res.json())
-        .then((data) => setUsers(data));
+    if (tickets.length > 0) {
+      setFormattedTickets(formatTickets(tickets, sessionUser));
+    } else {
+      setFormattedTickets([getEmptyDataTable()]);
     }
-  }, [sessionUser]);
-
-  useEffect(() => {
-    setFormattedTickets(formatTickets(tickets, sessionUser));
-  }, [sessionUser, tickets, formatTickets]);
+  }, [sessionUser, tickets, formatTickets, getEmptyDataTable]);
 
   return (
     <div>
@@ -160,7 +149,10 @@ const TicketDataTable = () => {
           <TableContainer title="Tickets">
             <TableToolbar>
               <TableToolbarContent>
-                <TableToolbarSearch onChange={(evt) => onInputChange(evt)} />
+                <TableToolbarSearch
+                  onChange={(evt) => onInputChange(evt)}
+                  disabled={!tickets.length}
+                />
                 <Button onClick={() => setCreateModalOpen(true)}>
                   Create Ticket
                 </Button>
