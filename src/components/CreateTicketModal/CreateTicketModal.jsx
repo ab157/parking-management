@@ -8,7 +8,6 @@ import {
   RadioButtonGroup,
   RadioButton,
   Dropdown,
-  // TimePicker,
 } from "@carbon/react";
 import { useAuthContext } from "../../context/AuthContext";
 import { createNewTicket, parkingSlots } from "../../utils/tickets";
@@ -21,7 +20,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [parkingFrom, setParkingFrom] = useState("");
   const [parkingTo, setParkingTo] = useState("");
   const [parkingSlot, setParkingSlot] = useState("");
-  const [forWhom, setForWhom] = useState("");
+  const [forWhom, setForWhom] = useState("self");
   const [userName, setUserName] = useState("");
   const [carNoError, setCarNoError] = useState("");
   const { user: sessionUser } = useAuthContext();
@@ -78,17 +77,16 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       secondaryButtonText="Cancel Ticket"
       hasScrollingContent={true}
     >
-      {/* <Form onSubmit={handleCreateTicket}> */}
       <RadioButtonGroup
         legendText="Select one option"
         name="radio-button-group"
-        defaultSelected={"radio-1"}
+        value={forWhom}
+        valueSelected={forWhom}
       >
         <RadioButton
           labelText="For Self"
           value="self"
           id="radio-1"
-          defaultChecked={true}
           onClick={(e) => setForWhom(e.target.value)}
         />
         <RadioButton
@@ -173,7 +171,6 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         titleText="Parking Slot"
         required
       />
-      {/* </Form> */}
     </Modal>
   );
 };
