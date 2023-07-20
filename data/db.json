@@ -1,145 +1,45 @@
 {
   "tickets": [
     {
-      "id": "e3ebde33-8827-4483-89ab-3bf07682dbfc",
-      "userId": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
-      "carNo": "MH30ZZ9999",
-      "parkingFrom": "2023-07-19T18:30:00.000Z",
-      "parkingTo": "2023-07-21T18:30:00.000Z",
-      "parkingSlot": "P1E"
-    },
-    {
-      "id": "fbbddc77-0a34-4e53-99d9-04d2c6187e38",
-      "userId": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
-      "carNo": "MH12AB3231",
-      "parkingFrom": "2023-07-17T18:30:00.000Z",
-      "parkingTo": "2023-07-18T18:30:00.000Z",
-      "parkingSlot": "P1C"
-    },
-    {
-      "id": "c23d1082-7a3b-40ac-a031-dfe6b016df7a",
-      "userId": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
-      "carNo": "MH31AZ8765",
-      "parkingFrom": "2023-07-20T18:30:00.000Z",
-      "parkingTo": "2023-07-21T18:30:00.000Z",
-      "parkingSlot": "P1I"
-    },
-    {
-      "id": "10168e1a-168e-4fae-b2ec-1890be01d2cc",
-      "userId": "1",
-      "carNo": "MH20BH2023",
+      "id": "690de3f2-4209-4ace-aff7-7f939ac3615e",
+      "userId": "0c8ccff7-71c9-4447-bcef-1d4910019b93",
+      "carNo": "MH12AB2345",
       "parkingFrom": "2023-07-17T18:30:00.000Z",
       "parkingTo": "2023-07-19T18:30:00.000Z",
       "parkingSlot": "P1D"
     },
     {
-      "id": "5bc07f59-b6e5-46b2-a33e-c1f3803cfcbe",
-      "userId": "1",
-      "carNo": "WB32CD1234",
-      "parkingFrom": "2023-07-21T18:30:00.000Z",
+      "id": "61588afd-1d61-4592-a958-67e3d503599f",
+      "userId": "87e75f3d-a035-45e6-aa6c-3482549d1e80",
+      "carNo": "WB21SA1234",
+      "parkingFrom": "2023-07-20T18:30:00.000Z",
       "parkingTo": "2023-07-23T18:30:00.000Z",
-      "parkingSlot": "P1B",
-      "user": {
-        "name": "Arun Kumar"
-      }
-    },
-    {
-      "id": "77d1c9bd-0b30-4612-9702-83d818380aea",
-      "userId": "1",
-      "carNo": "WB23KH6543",
-      "parkingFrom": "2023-07-21T18:30:00.000Z",
-      "parkingTo": "2023-07-22T18:30:00.000Z",
-      "parkingSlot": "P1C",
-      "user": {
-        "name": "Ashish Dutta"
-      }
-    },
-    {
-      "id": "2a20bd9e-8f7d-4aea-9c2e-da362af1efe4",
-      "userId": "7dc8beb3-0bce-4475-a9ee-6aecb4e2d952",
-      "carNo": "WB65DC1234",
-      "parkingFrom": "2023-07-17T18:30:00.000Z",
-      "parkingTo": "2023-07-19T18:30:00.000Z",
-      "parkingSlot": "P1C"
-    },
-    {
-      "id": "6fb73668-abb6-4464-8be7-0af456ad6682",
-      "userId": "7dc8beb3-0bce-4475-a9ee-6aecb4e2d952",
-      "carNo": "WB09ER6543",
-      "parkingFrom": "2023-07-19T18:30:00.000Z",
-      "parkingTo": "2023-07-25T18:30:00.000Z",
-      "parkingSlot": "P1E",
-      "user": {
-        "name": "Divesh Ghosh"
-      }
-    },
-    {
-      "id": "6cf68ef7-beec-44df-aa77-e6a70e8c4315",
-      "userId": "7dc8beb3-0bce-4475-a9ee-6aecb4e2d952",
-      "carNo": "WB05WQ4321",
-      "parkingFrom": "2023-07-22T18:30:00.000Z",
-      "parkingTo": "2023-07-24T18:30:00.000Z",
-      "parkingSlot": "P1D"
-    },
-    {
-      "id": "82270d3f-6adc-47d6-8d47-c3ae81914c33",
-      "userId": "27f6c38a-8e32-480a-b7fd-420cb70a34a3",
-      "carNo": "WB01SZ6548",
-      "parkingFrom": "2023-07-19T18:30:00.000Z",
-      "parkingTo": "2023-07-22T18:30:00.000Z",
-      "parkingSlot": "P1D",
-      "user": {
-        "name": "Rajiv Sarkar"
-      }
-    },
-    {
-      "id": "b00a9055-f13d-44d9-83b4-71f0461320a6",
-      "userId": "1669829a-dbee-4a45-97af-97424487d9d7",
-      "carNo": "MH46AZ0001",
-      "parkingFrom": "2023-07-21T18:30:00.000Z",
-      "parkingTo": "2023-07-22T18:30:00.000Z",
-      "parkingSlot": "P1I"
-    },
-    {
-      "id": "32f80798-fec8-49b5-9628-5c3e500b5b62",
-      "userId": "1669829a-dbee-4a45-97af-97424487d9d7",
-      "carNo": "MH99QW1234",
-      "parkingFrom": "2023-07-20T18:30:00.000Z",
-      "parkingTo": "2023-07-22T18:30:00.000Z",
-      "parkingSlot": "P1E"
-    },
-    {
-      "id": "79447bef-5d5a-4041-b80a-219a7af51769",
-      "userId": "1669829a-dbee-4a45-97af-97424487d9d7",
-      "carNo": "MH99JJ9999",
-      "parkingFrom": "2023-07-22T18:30:00.000Z",
-      "parkingTo": "2023-07-24T18:30:00.000Z",
       "parkingSlot": "P1C"
     }
   ],
   "users": [
-    {
-      "id": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
-      "first_name": "Abhishek",
-      "last_name": "Pawar",
-      "email": "abhishek@gmail.com",
-      "password": "$2a$10$It4rbu8EaZXynYfL9CNga.oj/pIiZsV5LWA7gIx1zLxHgJwJzH2vS",
-      "role": "ADMIN"
-    },
-    {
-      "id": "889f6085-0e6d-45e7-a349-7a10d15e1cac",
-      "first_name": "Pratik",
-      "last_name": "Shinde",
-      "email": "pratik@gmail.com",
-      "password": "$2a$10$4vUWb/hskVLWIdEGW6430e1bHNjulNPwAekcCW9jm5FDvb6S5lkty",
-      "role": "USER"
-    },
     {
       "id": "1669829a-dbee-4a45-97af-97424487d9d7",
       "first_name": "Rakesh",
       "last_name": "Mondal",
       "email": "rakesh@gmail.com",
       "password": "$2a$10$eOQ7emwUQlF7cAMSghVHDOCIULJxXkk1oiy0OFXGK8iEnX.MnbjyO",
+      "role": "USER"
+    },
+    {
+      "id": "0c8ccff7-71c9-4447-bcef-1d4910019b93",
+      "first_name": "Abhik",
+      "last_name": "Khan",
+      "email": "abhik@gmail.com",
+      "password": "$2a$10$vMoqHhI0d1hHMZLLt/JptusEpcZeA984CHTvZIHRIR9/nW23DMLV2",
+      "role": "ADMIN"
+    },
+    {
+      "id": "87e75f3d-a035-45e6-aa6c-3482549d1e80",
+      "first_name": "Abhishek",
+      "last_name": "Kumar",
+      "email": "abhishek@gmail.com",
+      "password": "$2a$10$iIUA75DUgPmpCf9B8nYT7u2EU.zx/wGnsLLQfgZWzclzvJxbvxDlu",
       "role": "USER"
     }
   ]

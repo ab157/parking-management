@@ -43,7 +43,6 @@ export const TicketDetailsModal = ({ ticket, isOpen, onClose }) => {
               Name : {user.first_name} {user.last_name}
             </p>
             <p>Email : {user.email}</p>
-            <p>Contact : {user.contact}</p>
           </>
         )}
       </ModalBody>

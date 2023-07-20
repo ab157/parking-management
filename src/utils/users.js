@@ -21,6 +21,20 @@ export async function getUserById(id, cb) {
   }
 }
 
+export async function getUserByEmail(email, cb) {
+  try {
+    const res = await fetch(`http://localhost:3031/users`);
+    const data = await res.json();
+    const user = await data.find((user) => user.email === email);
+    if (!user) throw new Error("No user found, Incorrect email");
+    cb(null, user);
+  } catch (err) {
+    if (err) {
+      cb(err, null);
+    }
+  }
+}
+
 export async function signUpUser(user, cb) {
   const newUser = {
     id: uuidv4(),
@@ -37,6 +51,8 @@ export async function signUpUser(user, cb) {
       body: JSON.stringify(newUser),
     });
 
+    if (!res.ok) throw new Error("Signup failed, please try again");
+
     cb(null, res);
   } catch (err) {
     cb(err, null);
@@ -45,20 +61,17 @@ export async function signUpUser(user, cb) {
 
 export async function loginUser({ email, password }, cb) {
   try {
-    getAllUsers((err, users) => {
-      const loginUser = users.find((user) => user?.email === email);
-
-      if (!loginUser) throw new Error("No user found");
-      //   Compare Password
-      const isCorrectPassword = bcrypt.compareSync(
-        password,
-        loginUser?.password
-      );
-      if (loginUser && !isCorrectPassword)
-        throw new Error("Incorrect password");
-
-      cb(null, loginUser);
-    });
+    const res = await fetch(`http://localhost:3031/users`);
+    const data = await res.json();
+    // Check if user exists
+    const user = await data.find((user) => user.email === email);
+    // Throw error if doesnt
+    if (!user) throw new Error("No user found, Incorrect email");
+    // Check if password match
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+    // If not throw error
+    if (!isCorrectPassword) throw new Error("Incorrect password");
+    cb(null, user);
   } catch (err) {
     cb(err, null);
   }

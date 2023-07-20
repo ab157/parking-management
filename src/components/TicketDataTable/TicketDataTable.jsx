@@ -24,7 +24,7 @@ import "./TicketDataTable.scss";
 import EditTicketModal from "../EditTicketModal/EditTicketModal";
 import { AuthContext } from "../../context/AuthContext";
 import { getHeadersForTicketsTable, getTickets } from "../../utils/tickets";
-import { getUserById } from "../../utils/users";
+import { getAllUsers, getUserById } from "../../utils/users";
 
 const TicketDataTable = () => {
   const [tickets, setTickets] = useState([]);
@@ -45,42 +45,46 @@ const TicketDataTable = () => {
     [tickets]
   );
 
-  const formatTickets = useCallback((tickets, user) => {
-    let modifiedTickets = [];
-    modifiedTickets = tickets.map((item) => {
-      return {
-        ...item,
-        parkingFrom: format(new Date(item.parkingFrom), "dd/MM/yy"),
-        parkingTo: format(new Date(item.parkingTo), "dd/MM/yy "),
-        actions: (
-          <div>
-            <Button
-              kind="ghost"
-              onClick={() => {
-                setSelectedTicket(item);
-                setEditModalOpen(true);
-              }}
-            >
-              <Edit />
-            </Button>
-          </div>
-        ),
-      };
-    });
-
-    if (user?.role === "ADMIN") {
-      modifiedTickets = modifiedTickets.map((item) => {
-        const user = getUserById(item?.userId);
-        const userName = user ? `${user?.first_name} ${user?.last_name}` : "";
+  const formatTickets = useCallback(
+    (tickets, user) => {
+      let modifiedTickets = [];
+      modifiedTickets = tickets.map((item) => {
         return {
           ...item,
-          userName,
+          parkingFrom: format(new Date(item.parkingFrom), "dd/MM/yy"),
+          parkingTo: format(new Date(item.parkingTo), "dd/MM/yy "),
+          actions: (
+            <div>
+              <Button
+                kind="ghost"
+                onClick={() => {
+                  setSelectedTicket(item);
+                  setEditModalOpen(true);
+                }}
+              >
+                <Edit />
+              </Button>
+            </div>
+          ),
         };
       });
-    }
 
-    return modifiedTickets;
-  }, []);
+      if (user?.role === "ADMIN") {
+        modifiedTickets = modifiedTickets.map((item) => {
+          const user = users.find((user) => user.id === item.userId);
+          if (user) {
+            return {
+              ...item,
+              userName: `${user?.first_name} ${user?.last_name}`,
+            };
+          }
+        });
+      }
+
+      return modifiedTickets;
+    },
+    [users]
+  );
 
   const getEmptyDataTable = useCallback(() => {
     return {
@@ -121,6 +125,10 @@ const TicketDataTable = () => {
           setTickets(tickets);
         }
       });
+    }
+
+    if (sessionUser?.role === "ADMIN") {
+      getAllUsers((err, users) => setUsers(users));
     }
   }, [sessionUser]);
 
@@ -172,10 +180,10 @@ const TicketDataTable = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.id} {...getRowProps({ row })}>
-                    {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>
+                {rows.map((row, index) => (
+                  <TableRow key={index} {...getRowProps({ row })}>
+                    {row.cells.map((cell, index) => (
+                      <TableCell key={index}>
                         {cell.info.header === "id" ? (
                           <Link onClick={() => handleTicketClick(row.id)}>
                             {cell.value}

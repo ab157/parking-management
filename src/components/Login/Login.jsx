@@ -25,7 +25,8 @@ const LoginForm = () => {
     loginUser({ email, password }, (err, user) => {
       if (err) {
         setIsError(true);
-        setError(err.message);
+        setError(err?.message);
+        return;
       }
       // If no error in login, then proceed
       setUser(user);
