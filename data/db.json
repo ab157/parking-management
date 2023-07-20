@@ -2,15 +2,15 @@
   "tickets": [
     {
       "id": "e3ebde33-8827-4483-89ab-3bf07682dbfc",
-      "userId": "1",
+      "userId": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
       "carNo": "MH30ZZ9999",
       "parkingFrom": "2023-07-19T18:30:00.000Z",
       "parkingTo": "2023-07-21T18:30:00.000Z",
-      "parkingSlot": "P1A"
+      "parkingSlot": "P1E"
     },
     {
       "id": "fbbddc77-0a34-4e53-99d9-04d2c6187e38",
-      "userId": "2",
+      "userId": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
       "carNo": "MH12AB3231",
       "parkingFrom": "2023-07-17T18:30:00.000Z",
       "parkingTo": "2023-07-18T18:30:00.000Z",
@@ -19,9 +19,9 @@
     {
       "id": "c23d1082-7a3b-40ac-a031-dfe6b016df7a",
       "userId": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
-      "carNo": "MH31AZ1234",
-      "parkingFrom": "2023-07-18T18:30:00.000Z",
-      "parkingTo": "2023-07-20T18:30:00.000Z",
+      "carNo": "MH31AZ8765",
+      "parkingFrom": "2023-07-20T18:30:00.000Z",
+      "parkingTo": "2023-07-21T18:30:00.000Z",
       "parkingSlot": "P1I"
     },
     {
@@ -31,27 +31,69 @@
       "parkingFrom": "2023-07-17T18:30:00.000Z",
       "parkingTo": "2023-07-19T18:30:00.000Z",
       "parkingSlot": "P1D"
+    },
+    {
+      "id": "5bc07f59-b6e5-46b2-a33e-c1f3803cfcbe",
+      "userId": "1",
+      "carNo": "WB32CD1234",
+      "parkingFrom": "2023-07-21T18:30:00.000Z",
+      "parkingTo": "2023-07-23T18:30:00.000Z",
+      "parkingSlot": "P1B",
+      "user": {
+        "name": "Arun Kumar"
+      }
+    },
+    {
+      "id": "77d1c9bd-0b30-4612-9702-83d818380aea",
+      "userId": "1",
+      "carNo": "WB23KH6543",
+      "parkingFrom": "2023-07-21T18:30:00.000Z",
+      "parkingTo": "2023-07-22T18:30:00.000Z",
+      "parkingSlot": "P1C",
+      "user": {
+        "name": "Ashish Dutta"
+      }
+    },
+    {
+      "id": "2a20bd9e-8f7d-4aea-9c2e-da362af1efe4",
+      "userId": "7dc8beb3-0bce-4475-a9ee-6aecb4e2d952",
+      "carNo": "WB65DC1234",
+      "parkingFrom": "2023-07-17T18:30:00.000Z",
+      "parkingTo": "2023-07-19T18:30:00.000Z",
+      "parkingSlot": "P1C"
+    },
+    {
+      "id": "6fb73668-abb6-4464-8be7-0af456ad6682",
+      "userId": "7dc8beb3-0bce-4475-a9ee-6aecb4e2d952",
+      "carNo": "WB09ER6543",
+      "parkingFrom": "2023-07-19T18:30:00.000Z",
+      "parkingTo": "2023-07-25T18:30:00.000Z",
+      "parkingSlot": "P1E",
+      "user": {
+        "name": "Divesh Ghosh"
+      }
+    },
+    {
+      "id": "6cf68ef7-beec-44df-aa77-e6a70e8c4315",
+      "userId": "7dc8beb3-0bce-4475-a9ee-6aecb4e2d952",
+      "carNo": "WB05WQ4321",
+      "parkingFrom": "2023-07-22T18:30:00.000Z",
+      "parkingTo": "2023-07-24T18:30:00.000Z",
+      "parkingSlot": "P1D"
+    },
+    {
+      "id": "82270d3f-6adc-47d6-8d47-c3ae81914c33",
+      "userId": "27f6c38a-8e32-480a-b7fd-420cb70a34a3",
+      "carNo": "WB01SZ6548",
+      "parkingFrom": "2023-07-19T18:30:00.000Z",
+      "parkingTo": "2023-07-22T18:30:00.000Z",
+      "parkingSlot": "P1D",
+      "user": {
+        "name": "Rajiv Sarkar"
+      }
     }
   ],
   "users": [
-    {
-      "id": "1",
-      "first_name": "Abhik",
-      "last_name": "Khan",
-      "email": "abhik@gmail.com",
-      "contact": "+91 123 456 7898",
-      "password": "Abhik@123",
-      "role": "ADMIN"
-    },
-    {
-      "id": "2",
-      "first_name": "Rohit",
-      "last_name": "Saraf",
-      "email": "rohit@gmail.com",
-      "contact": "+91 123 456 7898",
-      "password": "Rohit@123",
-      "role": "USER"
-    },
     {
       "id": "3f100325-0b8a-49e2-9ec6-68ac33c61812",
       "first_name": "Abhishek",
@@ -66,6 +108,14 @@
       "last_name": "Shinde",
       "email": "pratik@gmail.com",
       "password": "$2a$10$4vUWb/hskVLWIdEGW6430e1bHNjulNPwAekcCW9jm5FDvb6S5lkty",
+      "role": "USER"
+    },
+    {
+      "id": "1669829a-dbee-4a45-97af-97424487d9d7",
+      "first_name": "Rakesh",
+      "last_name": "Mondal",
+      "email": "rakesh@gmail.com",
+      "password": "$2a$10$eOQ7emwUQlF7cAMSghVHDOCIULJxXkk1oiy0OFXGK8iEnX.MnbjyO",
       "role": "USER"
     }
   ]

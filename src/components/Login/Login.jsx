@@ -9,6 +9,7 @@ import { Form, useNavigate, redirect } from "react-router-dom";
 import validator from "validator";
 import { useAuthContext } from "../../context/AuthContext";
 import "./Login.scss";
+import bcrypt from "bcryptjs";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -26,19 +27,22 @@ const LoginForm = () => {
       .then((data) => setUsers(data));
   }, []);
 
-  const verifyUser = (email) => {
-    return users.filter((user) => user.email === email);
+  const verifyUser = (email, password) => {
+    return users.find(
+      (user) =>
+        user.email === email && bcrypt.compareSync(password, user.password)
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const existingUser = verifyUser(email);
-    if (existingUser.length === 0) {
+    const existingUser = verifyUser(email, password);
+    if (!existingUser) {
       setIsError(true);
       setError("Invalid Credentials");
     } else {
-      localStorage.setItem("user", JSON.stringify(existingUser[0]));
-      setUser(existingUser[0]);
+      localStorage.setItem("user", JSON.stringify(existingUser));
+      setUser(existingUser);
       redirect("/tickets");
     }
 

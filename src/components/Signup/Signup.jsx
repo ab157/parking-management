@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import validator from "validator";
-import { Form, redirect, useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import {
   TextInput,
   Button,
@@ -28,6 +28,19 @@ const SignupForm = () => {
 
   const navigate = useNavigate();
 
+  function clearAllInputs() {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setIsEmail(true);
+    setPassword("");
+    setIsPassword(true);
+    setConfirmPassword("");
+    setIsConfirmPassword(true);
+    setRole("");
+    setUsers([]);
+  }
+
   useEffect(() => {
     fetch("http://localhost:3031/users")
       .then((res) => res.json())
@@ -52,14 +65,14 @@ const SignupForm = () => {
       // Create new user in backend
       createUser(newUser);
       // Save in localstorage
-      localStorage.setItem("user", JSON.stringify(newUser));
+      // localStorage.setItem("user", JSON.stringify(newUser));
       // Creation Successful
       setIsCreated(true);
+      clearAllInputs();
       // Navigate
       setTimeout(() => {
-        setIsCreated(false);
-        redirect("/login");
-      }, 2000);
+        navigate("/login");
+      }, 1500);
     }
   };
 
