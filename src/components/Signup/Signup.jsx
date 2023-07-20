@@ -76,6 +76,7 @@ const SignupForm = () => {
 
   return (
     <Form className="signup-form" onSubmit={handleSignUp}>
+      <h1>Sign up</h1>
       {error && (
         <InlineNotification
           kind="error"

@@ -43,6 +43,7 @@ const LoginForm = () => {
   return (
     <>
       <Form className="login-form" onSubmit={handleSubmit}>
+        <h1>Login</h1>
         {isError && (
           <InlineNotification
             kind="error"

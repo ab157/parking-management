@@ -40,7 +40,11 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
   }
 
   function handleEditTicket() {
-    editTicket(ticketToUpdate, (err, ticket) => console.log(ticket));
+    editTicket(ticketToUpdate, (err, ticket) => {
+      if (err) return;
+      console.log(ticket);
+      onClose();
+    });
   }
 
   return (
