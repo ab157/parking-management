@@ -140,7 +140,10 @@ const SignupForm = () => {
           setIsPassword(validator.isStrongPassword(e.target.value));
         }}
         invalid={!isPassword}
-        invalidText={!isPassword && "The password you entered is invalid"}
+        invalidText={
+          !isPassword &&
+          "The password should contain an Uppercase Alphabet , Lowecase Alphabet, a Special Character and Number(s)"
+        }
       />
       {/* Confirm Password */}
       <PasswordInput
@@ -183,7 +186,7 @@ const SignupForm = () => {
           kind="secondary"
           onClick={() => navigate("/login")}
         >
-          Login
+          Back to Login
         </Button>
       </div>
     </Form>

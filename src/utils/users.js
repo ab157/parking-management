@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 
+// Get all users
 export async function getAllUsers(cb) {
   try {
     const res = await fetch("http://localhost:3031/users");
@@ -11,6 +12,7 @@ export async function getAllUsers(cb) {
   }
 }
 
+// Get user by ID
 export async function getUserById(id, cb) {
   try {
     const res = await fetch(`http://localhost:3031/users/${id}`);
@@ -21,6 +23,7 @@ export async function getUserById(id, cb) {
   }
 }
 
+// Get user by Email
 export async function getUserByEmail(email, cb) {
   try {
     const res = await fetch(`http://localhost:3031/users`);
@@ -35,7 +38,9 @@ export async function getUserByEmail(email, cb) {
   }
 }
 
+// Signup User
 export async function signUpUser(user, cb) {
+  // Add ID and encrypt password in user
   const newUser = {
     id: uuidv4(),
     ...user,
@@ -59,6 +64,7 @@ export async function signUpUser(user, cb) {
   }
 }
 
+// Login User
 export async function loginUser({ email, password }, cb) {
   try {
     const res = await fetch(`http://localhost:3031/users`);
@@ -66,11 +72,11 @@ export async function loginUser({ email, password }, cb) {
     // Check if user exists
     const user = await data.find((user) => user.email === email);
     // Throw error if doesnt
-    if (!user) throw new Error("No user found, Incorrect email");
+    if (!user) throw new Error("Invalid Credentials");
     // Check if password match
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     // If not throw error
-    if (!isCorrectPassword) throw new Error("Incorrect password");
+    if (!isCorrectPassword) throw new Error("Invalid Credentials");
     cb(null, user);
   } catch (err) {
     cb(err, null);
