@@ -57,6 +57,8 @@ const TicketDataTable = () => {
           ...item,
           parkingFrom: format(new Date(item.parkingFrom), "dd/MM/yy"),
           parkingTo: format(new Date(item.parkingTo), "dd/MM/yy "),
+          timeFrom: format(new Date(item.timeFrom), "hh:mm a"),
+          timeTill: format(new Date(item.timeTill), "hh:mm a"),
           actions: (
             <div>
               <Button
@@ -73,13 +75,41 @@ const TicketDataTable = () => {
         };
       });
 
-      if (user?.role === "ADMIN") {
+      if (user?.role === "REVIEWER") {
         modifiedTickets = modifiedTickets.map((item) => {
-          const user = users.find((user) => user.id === item.userId);
+          const user = users.find((user) => user.id === item.createdBy.userId);
           if (user) {
             return {
               ...item,
-              userName: `${user?.first_name} ${user?.last_name}`,
+              actions: (
+                <div>
+                  <Button kind="ghost">Mark as Reviewed</Button>
+                  <Button kind="ghost">Send Back to Edit</Button>
+                </div>
+              ),
+              userName: item?.createdFor
+                ? `${item?.createdFor?.name}`
+                : `${user?.first_name} ${user?.last_name}`,
+            };
+          }
+        });
+      }
+
+      if (user?.role === "ADMIN") {
+        modifiedTickets = modifiedTickets.map((item) => {
+          const user = users.find((user) => user.id === item.createdBy.userId);
+          if (user) {
+            return {
+              ...item,
+              actions: (
+                <div>
+                  <Button kind="ghost">Approve Ticket</Button>
+                  <Button kind="ghost">Send Back to Review</Button>
+                </div>
+              ),
+              userName: item?.createdFor
+                ? `${item?.createdFor?.name}`
+                : `${user?.first_name} ${user?.last_name}`,
             };
           }
         });
@@ -93,7 +123,9 @@ const TicketDataTable = () => {
   const getEmptyDataTable = useCallback(() => {
     return {
       id: "",
-      userId: "",
+      createdBy: {
+        userId: "",
+      },
       carNo: (
         <NoDataEmptyState
           size="lg"
@@ -123,7 +155,9 @@ const TicketDataTable = () => {
         }
         if (sessionUser?.role === "USER") {
           setTickets(
-            tickets.filter((ticket) => ticket.userId === sessionUser?.id)
+            tickets.filter(
+              (ticket) => ticket.createdBy.userId === sessionUser?.id
+            )
           );
         } else {
           setTickets(tickets);
@@ -131,7 +165,7 @@ const TicketDataTable = () => {
       });
     }
 
-    if (sessionUser?.role === "ADMIN") {
+    if (sessionUser?.role === "ADMIN" || sessionUser?.role === "REVIEWER") {
       getAllUsers((err, users) => setUsers(users));
     }
   }, [sessionUser]);
@@ -145,71 +179,74 @@ const TicketDataTable = () => {
   }, [sessionUser, tickets, formatTickets, getEmptyDataTable]);
   return (
     <div>
-      <DataTable
-        rows={formattedTickets}
-        headers={getHeadersForTicketsTable(sessionUser?.role)}
-      >
-        {({
-          rows,
-          headers,
-          getHeaderProps,
-          getRowProps,
-          getTableProps,
-          onInputChange,
-        }) => (
-          <TableContainer title="Tickets">
-            <TableToolbar>
-              <TableToolbarContent>
-                <TableToolbarSearch
-                  onChange={(evt) => onInputChange(evt)}
-                  disabled={!tickets.length}
-                />
-                <Button onClick={() => setCreateModalOpen(true)}>
-                  Create Ticket
-                </Button>
-              </TableToolbarContent>
-            </TableToolbar>
-            <Table {...getTableProps()}>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header) => (
-                    <TableHeader
-                      key={header.key}
-                      {...getHeaderProps({ header })}
-                    >
-                      {header.header}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow key={index} {...getRowProps({ row })}>
-                    {row.cells.map((cell, index) => (
-                      <TableCell key={index}>
-                        {cell.info.header === "id" ? (
-                          <Link onClick={() => handleTicketClick(row.id)}>
-                            {cell.value}
-                          </Link>
-                        ) : (
-                          cell.value
-                        )}
-                      </TableCell>
+      {formattedTickets && (
+        <DataTable
+          id="ticketsDataTable"
+          rows={formattedTickets}
+          headers={getHeadersForTicketsTable(sessionUser?.role)}
+        >
+          {({
+            rows,
+            headers,
+            getHeaderProps,
+            getRowProps,
+            getTableProps,
+            onInputChange,
+          }) => (
+            <TableContainer title="Tickets">
+              <TableToolbar>
+                <TableToolbarContent>
+                  <TableToolbarSearch
+                    onChange={(evt) => onInputChange(evt)}
+                    disabled={!tickets.length}
+                  />
+                  <Button onClick={() => setCreateModalOpen(true)}>
+                    Create Ticket
+                  </Button>
+                </TableToolbarContent>
+              </TableToolbar>
+              <Table {...getTableProps()}>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header) => (
+                      <TableHeader
+                        key={header.key}
+                        {...getHeaderProps({ header })}
+                      >
+                        {header.header}
+                      </TableHeader>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </DataTable>
-      <Pagination
+                </TableHead>
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <TableRow key={index} {...getRowProps({ row })}>
+                      {row.cells.map((cell, index) => (
+                        <TableCell key={index}>
+                          {cell.info.header === "id" ? (
+                            <Link onClick={() => handleTicketClick(row.id)}>
+                              {cell.value}
+                            </Link>
+                          ) : (
+                            cell.value
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </DataTable>
+      )}
+      {/* <Pagination
         page={currentPage}
         pageSize={pageSize}
         pageSizes={[5, 10, 20, 40, 50]}
         itemsPerPageText="Items per page:"
         totalItems={formattedTickets.length}
-      />
+      /> */}
       {createModalOpen && (
         <CreateTicketModal
           isOpen={createModalOpen}

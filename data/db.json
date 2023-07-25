@@ -1,5 +1,65 @@
 {
-  "tickets": [],
+  "tickets": [
+    {
+      "id": "41d4aff0-65d5-4f39-8ba8-443ca9b2f85a",
+      "carNo": "WB65DC1234",
+      "parkingFrom": "2023-07-24T18:30:00.000Z",
+      "timeFrom": 1690266600000,
+      "parkingTo": "2023-07-26T18:30:00.000Z",
+      "timeTill": 1690462800000,
+      "parkingSlot": "P1D",
+      "createdBy": {
+        "userId": "0c8ccff7-71c9-4447-bcef-1d4910019b93"
+      },
+      "isReviewed": false,
+      "isApproved": false
+    },
+    {
+      "id": "308a7136-0191-434e-93fb-209c6787198b",
+      "carNo": "MH12AB3231",
+      "parkingFrom": "2023-07-24T18:30:00.000Z",
+      "timeFrom": 1690273800000,
+      "parkingTo": "2023-07-25T18:30:00.000Z",
+      "timeTill": 1690389000000,
+      "parkingSlot": "P1I",
+      "createdBy": {
+        "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
+      },
+      "isReviewed": false,
+      "isApproved": false
+    },
+    {
+      "id": "4466ce49-b43c-4183-b638-a28f02232168",
+      "carNo": "WB01CD1234",
+      "parkingFrom": "2023-07-24T18:30:00.000Z",
+      "timeFrom": 1690269300000,
+      "parkingTo": "2023-07-28T18:30:00.000Z",
+      "timeTill": 1690622100000,
+      "parkingSlot": "P1C",
+      "createdBy": {
+        "userId": "139ecfdc-644d-4047-a375-fb372301666b"
+      },
+      "isReviewed": false,
+      "isApproved": false
+    },
+    {
+      "id": "560e07a9-80d0-4edd-b8a8-73df60e5956f",
+      "carNo": "WB09WQ1234",
+      "parkingFrom": "2023-07-25T18:30:00.000Z",
+      "timeFrom": 1690362000000,
+      "parkingTo": "2023-07-28T18:30:00.000Z",
+      "timeTill": 1690628400000,
+      "parkingSlot": "P1E",
+      "createdBy": {
+        "userId": "139ecfdc-644d-4047-a375-fb372301666b"
+      },
+      "isReviewed": false,
+      "isApproved": false,
+      "createdFor": {
+        "name": "Dinesh Singh"
+      }
+    }
+  ],
   "users": [
     {
       "id": "0c8ccff7-71c9-4447-bcef-1d4910019b93",
@@ -8,6 +68,30 @@
       "email": "abhik@gmail.com",
       "password": "$2a$10$vMoqHhI0d1hHMZLLt/JptusEpcZeA984CHTvZIHRIR9/nW23DMLV2",
       "role": "ADMIN"
+    },
+    {
+      "id": "77589e97-b3aa-4e03-822c-70c2aa4a4546",
+      "first_name": "Pratik",
+      "last_name": "Kumar",
+      "email": "pratik@gmail.com",
+      "password": "$2a$10$T22MPsTsNR/ewrLOzPIhFuC0VGz6c1pqAN4z4FY0RevGoKboCE8HS",
+      "role": "USER"
+    },
+    {
+      "id": "29a4acf9-d145-4f99-a044-896828bbc238",
+      "first_name": "Nitesh",
+      "last_name": "Shinde",
+      "email": "nitesh@gmail.com",
+      "password": "$2a$10$lWOOvaB1ehFs51lqleML5ufZpTHpJus/vU7DC1vW.150IOV8ggzJm",
+      "role": "REVIEWER"
+    },
+    {
+      "id": "139ecfdc-644d-4047-a375-fb372301666b",
+      "first_name": "Vivek",
+      "last_name": "Kumar",
+      "email": "vivek@gmail.com",
+      "password": "$2a$10$3tlrx/6JCzVXqdkCOxtN0ulnTk2ba08fPvSRfW9bvNipXhgfyOrXi",
+      "role": "USER"
     }
   ]
 }

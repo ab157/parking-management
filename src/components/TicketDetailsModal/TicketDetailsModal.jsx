@@ -2,20 +2,22 @@ import { Modal, ModalBody } from "@carbon/react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { getUserById } from "../../utils/users";
 
 export const TicketDetailsModal = ({ ticket, isOpen, onClose }) => {
   const [user, setUser] = useState("");
 
   useEffect(() => {
-    if (ticket) {
-      fetch(`http://localhost:3031/users/${ticket.userId}`)
-        .then((res) => res.json())
-        .then((data) => setUser(data));
-    }
+    getUserById(ticket?.createdBy?.userId, (err, user) => {
+      if (err) setUser(null);
+      setUser(user);
+    });
   }, [ticket]);
 
   const parkingFromDate = format(new Date(ticket?.parkingFrom), "dd/MM/yy");
   const parkingToDate = format(new Date(ticket?.parkingTo), "dd/MM/yy");
+  const parkingFromTime = format(new Date(ticket?.timeFrom), "hh:mm a");
+  const parkingToTime = format(new Date(ticket?.timeTill), "hh:mm a");
 
   return (
     <Modal
@@ -27,18 +29,24 @@ export const TicketDetailsModal = ({ ticket, isOpen, onClose }) => {
     >
       <ModalBody>
         <h5>Ticket Information</h5>
-        <p>Car No : {ticket?.carNo}</p>
+        <p>Car No: {ticket?.carNo}</p>
         <p>
-          Parking From : {parkingFromDate} {ticket?.parkingFromTime}
+          Parking From: {parkingFromDate} {parkingFromTime}
         </p>
         <p>
-          Parking To : {parkingToDate} {ticket?.parkingToTime}
+          Parking To: {parkingToDate} {parkingToTime}
         </p>
-        <p>Parking Slot : {ticket?.parkingSlot}</p>
+        <p>Parking Slot: {ticket?.parkingSlot}</p>
         <br />
-        <h5>User Information : </h5>
+        {ticket?.createdFor && (
+          <>
+            <h5>Created For:</h5>
+            <p>Name : {ticket?.createdFor?.name}</p>
+          </>
+        )}
         {user && (
           <>
+            <h5>Created By: </h5>
             <p>
               Name : {user.first_name} {user.last_name}
             </p>
@@ -53,12 +61,17 @@ export const TicketDetailsModal = ({ ticket, isOpen, onClose }) => {
 TicketDetailsModal.propTypes = {
   ticket: PropTypes.shape({
     id: PropTypes.string,
-    userId: PropTypes.string,
+    createdBy: {
+      userId: PropTypes.string,
+    },
+    createdFor: {
+      name: PropTypes.string,
+    },
     carNo: PropTypes.string,
     parkingFrom: PropTypes.string,
     parkingTo: PropTypes.string,
-    parkingFromTime: PropTypes.string,
-    parkingToTime: PropTypes.string,
+    timeFrom: PropTypes.string,
+    timeTill: PropTypes.string,
     parkingSlot: PropTypes.string,
   }),
   isOpen: PropTypes.bool,

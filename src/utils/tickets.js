@@ -60,8 +60,16 @@ export function getHeadersForTicketsTable(userRole) {
       header: "Parking From",
     },
     {
+      key: "timeFrom",
+      header: "Time From",
+    },
+    {
       key: "parkingTo",
       header: "Parking To",
+    },
+    {
+      key: "timeTill",
+      header: "Time Till",
     },
     {
       key: "parkingSlot",

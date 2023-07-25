@@ -17,7 +17,7 @@ import { createNewTicket, parkingSlots } from "../../utils/tickets";
 import { redirect } from "react-router-dom";
 // CSS
 import "./CreateTicketModal.scss";
-import { format } from "date-fns";
+import { convertTimeStringToTimeStamp } from "../../utils/formatDate";
 
 export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [carNo, setCarNo] = useState("");
@@ -31,19 +31,37 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [carNoError, setCarNoError] = useState("");
   const { user: sessionUser } = useAuthContext();
 
-  console.log(format(1690161634387, "HH:mm:ss"));
   const handleCreateTicket = () => {
+    const timeFrom = convertTimeStringToTimeStamp(
+      `${parkingFromTime.time} ${parkingFromTime.label}`,
+      parkingFrom
+    );
+
+    const timeTill = convertTimeStringToTimeStamp(
+      `${parkingToTime.time} ${parkingToTime.label}`,
+      parkingTo
+    );
+
+    console.log(timeFrom);
+    console.log(timeTill);
+
     let ticket = {
-      userId: sessionUser?.id,
       carNo,
       parkingFrom,
+      timeFrom,
       parkingTo,
+      timeTill,
       parkingSlot,
+      createdBy: {
+        userId: sessionUser?.id,
+      },
+      isReviewed: false,
+      isApproved: false,
     };
     if (forWhom !== "self") {
       ticket = {
         ...ticket,
-        user: {
+        createdFor: {
           name: userName,
         },
       };
@@ -125,11 +143,12 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         invalid={!!carNoError}
         invalidText={carNoError}
       />
+
       <DatePicker
         className="input"
         datePickerType="single"
         minDate={new Date().toLocaleDateString()}
-        onChange={(date) => setParkingFrom(date[0])}
+        onChange={(date) => setParkingFrom(date[0].toISOString())}
         value={parkingFrom}
       >
         <DatePickerInput
@@ -143,7 +162,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         className="input"
         datePickerType="single"
         minDate={new Date().toLocaleDateString()}
-        onChange={(date) => setParkingTo(date[0])}
+        onChange={(date) => setParkingTo(date[0].toISOString())}
         value={parkingTo}
       >
         <DatePickerInput
@@ -153,6 +172,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
           placeholder="mm/dd/yyyy"
         />
       </DatePicker>
+
       <div className="time-picker">
         <TimePicker
           id="fromTime"
@@ -162,6 +182,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
               return { ...prev, time: e.target.value };
             })
           }
+          value={parkingFromTime.time}
         >
           <TimePickerSelect
             id="time-picker-from-date"
@@ -184,6 +205,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
               return { ...prev, time: e.target.value };
             })
           }
+          value={parkingToTime.time}
         >
           <TimePickerSelect
             id="time-picker-to-date"
