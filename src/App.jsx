@@ -26,7 +26,7 @@ const App = () => {
         {user?.email && (
           <div className="header_actions">
             <p>
-              {user?.first_name} {user?.last_name}
+              {user?.first_name} {user?.last_name} ({user?.role})
             </p>
             <span>|</span>
             <button

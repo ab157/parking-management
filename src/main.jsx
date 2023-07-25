@@ -7,11 +7,17 @@ import LoginForm from "./components/Login/Login";
 import SignupForm from "./components/Signup/Signup";
 import { AuthProvider } from "./context/AuthContext";
 import TicketPage from "./components/TIcketPage/TicketPage";
+import { Provider } from "react-redux";
+import store from "./features/store";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <Provider store={store}>
+        <App />
+      </Provider>
+    ),
     errorElement: <div>Error 404</div>,
     children: [
       {

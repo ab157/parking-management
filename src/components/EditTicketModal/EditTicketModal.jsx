@@ -5,7 +5,9 @@ import {
   DatePickerInput,
   TextInput,
   Dropdown,
-  // TimePicker,
+  TimePicker,
+  TimePickerSelect,
+  SelectItem,
 } from "@carbon/react";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
@@ -46,7 +48,6 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
       onClose();
     });
   }
-
   return (
     <Modal
       size="md"
@@ -72,7 +73,9 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
           datePickerType="single"
           name="parkingFrom"
           minDate={ticketToUpdate?.parkingFrom}
-          onChange={(date) => handleChange("parkingFrom", date[0])}
+          onChange={(date) =>
+            handleChange("parkingFrom", date[0].toISOString())
+          }
           value={ticketToUpdate?.parkingFrom}
         >
           <DatePickerInput
@@ -87,7 +90,7 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
           name="parkingTo"
           datePickerType="single"
           minDate={ticketToUpdate?.parkingFrom}
-          onChange={(date) => handleChange("parkingTo", date[0])}
+          onChange={(date) => handleChange("parkingTo", date[0].toISOString())}
           value={ticketToUpdate?.parkingTo}
         >
           <DatePickerInput
@@ -97,6 +100,21 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
             size="md"
           />
         </DatePicker>
+        <div>
+          <TimePicker id="fromTime" labelText="Select Time From">
+            <TimePickerSelect id="time-picker-from-date">
+              <SelectItem value="AM" text="AM" />
+              <SelectItem value="PM" text="PM" />
+            </TimePickerSelect>
+          </TimePicker>
+
+          <TimePicker id="toTime" labelText="Select Time To">
+            <TimePickerSelect id="time-picker-to-date">
+              <SelectItem value="AM" text="AM" />
+              <SelectItem value="PM" text="PM" />
+            </TimePickerSelect>
+          </TimePicker>
+        </div>
         <Dropdown
           id="parkingSlot"
           name="parkingSlot"

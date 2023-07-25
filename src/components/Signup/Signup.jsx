@@ -162,7 +162,7 @@ const SignupForm = () => {
       />
       <Dropdown
         id="roles"
-        items={["USER", "ADMIN"]}
+        items={["USER", "REVIEWER", "ADMIN"]}
         titleText="Select a role"
         label="Select a role"
         onChange={(data) => setRole(data.selectedItem)}
