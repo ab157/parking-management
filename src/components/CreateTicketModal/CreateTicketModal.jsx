@@ -8,23 +8,30 @@ import {
   RadioButtonGroup,
   RadioButton,
   Dropdown,
+  TimePicker,
+  TimePickerSelect,
+  SelectItem,
 } from "@carbon/react";
 import { useAuthContext } from "../../context/AuthContext";
 import { createNewTicket, parkingSlots } from "../../utils/tickets";
 import { redirect } from "react-router-dom";
 // CSS
 import "./CreateTicketModal.scss";
+import { format } from "date-fns";
 
 export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [carNo, setCarNo] = useState("");
   const [parkingFrom, setParkingFrom] = useState("");
+  const [parkingFromTime, setParkingFromTime] = useState("");
   const [parkingTo, setParkingTo] = useState("");
+  const [parkingToTime, setParkingToTime] = useState("");
   const [parkingSlot, setParkingSlot] = useState("");
   const [forWhom, setForWhom] = useState("self");
   const [userName, setUserName] = useState("");
   const [carNoError, setCarNoError] = useState("");
   const { user: sessionUser } = useAuthContext();
 
+  console.log(format(1690161634387, "HH:mm:ss"));
   const handleCreateTicket = () => {
     let ticket = {
       userId: sessionUser?.id,
@@ -121,10 +128,9 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       <DatePicker
         className="input"
         datePickerType="single"
-        minDate={new Date()}
-        onChange={(date) => {
-          setParkingFrom(date[0]);
-        }}
+        minDate={new Date().toLocaleDateString()}
+        onChange={(date) => setParkingFrom(date[0])}
+        value={parkingFrom}
       >
         <DatePickerInput
           id="parkingFrom"
@@ -136,8 +142,9 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       <DatePicker
         className="input"
         datePickerType="single"
-        minDate={new Date(parkingFrom)}
+        minDate={new Date().toLocaleDateString()}
         onChange={(date) => setParkingTo(date[0])}
+        value={parkingTo}
       >
         <DatePickerInput
           id="parkingTo"
@@ -146,22 +153,51 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
           placeholder="mm/dd/yyyy"
         />
       </DatePicker>
-      {/* <div className="time-picker">
-          <TimePicker
-            id="fromTime"
-            labelText=""
-            onChange={(e) => setParkingFromTime(e.target.value)}
-            value={parkingFromTime}
-            timeFormat="12"
-          />
-          <TimePicker
-            id="toTime"
-            labelText=""
-            onChange={(e) => setParkingToTime(e.target.value)}
-            value={parkingToTime}
-            timeFormat="12"
-          />
-        </div> */}
+      <div className="time-picker">
+        <TimePicker
+          id="fromTime"
+          labelText="Select Time From"
+          onChange={(e) =>
+            setParkingFromTime((prev) => {
+              return { ...prev, time: e.target.value };
+            })
+          }
+        >
+          <TimePickerSelect
+            id="time-picker-from-date"
+            onChange={(e) =>
+              setParkingFromTime((prev) => {
+                return { ...prev, label: e.target.value };
+              })
+            }
+          >
+            <SelectItem value="AM" text="AM" />
+            <SelectItem value="PM" text="PM" />
+          </TimePickerSelect>
+        </TimePicker>
+
+        <TimePicker
+          id="toTime"
+          labelText="Select Time To"
+          onChange={(e) =>
+            setParkingToTime((prev) => {
+              return { ...prev, time: e.target.value };
+            })
+          }
+        >
+          <TimePickerSelect
+            id="time-picker-to-date"
+            onChange={(e) =>
+              setParkingToTime((prev) => {
+                return { ...prev, label: e.target.value };
+              })
+            }
+          >
+            <SelectItem value="AM" text="AM" />
+            <SelectItem value="PM" text="PM" />
+          </TimePickerSelect>
+        </TimePicker>
+      </div>
       <Dropdown
         id="parkingSlot"
         selectedItem={parkingSlot}

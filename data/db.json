@@ -1,50 +1,6 @@
 {
-  "tickets": [
-    {
-      "id": "690de3f2-4209-4ace-aff7-7f939ac3615e",
-      "userId": "0c8ccff7-71c9-4447-bcef-1d4910019b93",
-      "carNo": "MH12AB2345",
-      "parkingFrom": "2023-07-17T18:30:00.000Z",
-      "parkingTo": "2023-07-19T18:30:00.000Z",
-      "parkingSlot": "P1B"
-    },
-    {
-      "id": "61588afd-1d61-4592-a958-67e3d503599f",
-      "userId": "87e75f3d-a035-45e6-aa6c-3482549d1e80",
-      "carNo": "WB21SA1234",
-      "parkingFrom": "2023-07-20T18:30:00.000Z",
-      "parkingTo": "2023-07-23T18:30:00.000Z",
-      "parkingSlot": "P1C"
-    },
-    {
-      "id": "08ca9064-cdd5-4066-b785-4161243e2684",
-      "userId": "3c0c058d-dcc6-4b7e-85f4-33c25cd9c621",
-      "carNo": "WB02SK1234",
-      "parkingFrom": "2023-07-19T18:30:00.000Z",
-      "parkingTo": "2023-07-23T18:30:00.000Z",
-      "parkingSlot": "P1F"
-    },
-    {
-      "id": "e77eaabe-f515-4fa7-b4ed-209935f86bc2",
-      "userId": "3c0c058d-dcc6-4b7e-85f4-33c25cd9c621",
-      "carNo": "MH12QW1234",
-      "parkingFrom": "2023-07-25T18:30:00.000Z",
-      "parkingTo": "2023-07-29T18:30:00.000Z",
-      "parkingSlot": "P1I",
-      "user": {
-        "name": "Zebra"
-      }
-    }
-  ],
+  "tickets": [],
   "users": [
-    {
-      "id": "1669829a-dbee-4a45-97af-97424487d9d7",
-      "first_name": "Rakesh",
-      "last_name": "Mondal",
-      "email": "rakesh@gmail.com",
-      "password": "$2a$10$eOQ7emwUQlF7cAMSghVHDOCIULJxXkk1oiy0OFXGK8iEnX.MnbjyO",
-      "role": "USER"
-    },
     {
       "id": "0c8ccff7-71c9-4447-bcef-1d4910019b93",
       "first_name": "Abhik",
@@ -52,22 +8,6 @@
       "email": "abhik@gmail.com",
       "password": "$2a$10$vMoqHhI0d1hHMZLLt/JptusEpcZeA984CHTvZIHRIR9/nW23DMLV2",
       "role": "ADMIN"
-    },
-    {
-      "id": "87e75f3d-a035-45e6-aa6c-3482549d1e80",
-      "first_name": "Abhishek",
-      "last_name": "Kumar",
-      "email": "abhishek@gmail.com",
-      "password": "$2a$10$iIUA75DUgPmpCf9B8nYT7u2EU.zx/wGnsLLQfgZWzclzvJxbvxDlu",
-      "role": "USER"
-    },
-    {
-      "id": "3c0c058d-dcc6-4b7e-85f4-33c25cd9c621",
-      "first_name": "Vivek",
-      "last_name": "Roy",
-      "email": "vivek@gmail.com",
-      "password": "$2a$10$jwKWgkrjaJXjuZFdf6qcUu/O803tmv/7.EQqZpFb51HGjunk0jY2a",
-      "role": "USER"
     }
   ]
 }

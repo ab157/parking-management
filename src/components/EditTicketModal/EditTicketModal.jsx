@@ -97,22 +97,6 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
             size="md"
           />
         </DatePicker>
-        {/* <div className="time-picker">
-          <TimePicker
-            id="fromTime"
-            name="timeFrom"
-            labelText=""
-            value={ticketToUpdate?.parkingFromTime}
-            timeFormat="12"
-          />
-          <TimePicker
-            id="toTime"
-            name="timeTo"
-            labelText=""
-            value={ticketToUpdate?.parkingToTime}
-            timeFormat="12"
-          />
-        </div> */}
         <Dropdown
           id="parkingSlot"
           name="parkingSlot"

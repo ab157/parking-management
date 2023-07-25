@@ -13,6 +13,7 @@ import {
   TableToolbarContent,
   TableToolbarSearch,
   Link,
+  Pagination,
 } from "@carbon/react";
 import { NoDataEmptyState } from "@carbon/ibm-products/lib/components";
 import { Edit, Add } from "@carbon/icons-react";
@@ -34,7 +35,10 @@ const TicketDataTable = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const { user: sessionUser } = useContext(AuthContext);
+
+  const pageSize = 5;
 
   const handleTicketClick = useCallback(
     (ticketId) => {
@@ -139,7 +143,6 @@ const TicketDataTable = () => {
       setFormattedTickets([getEmptyDataTable()]);
     }
   }, [sessionUser, tickets, formatTickets, getEmptyDataTable]);
-
   return (
     <div>
       <DataTable
@@ -200,6 +203,13 @@ const TicketDataTable = () => {
           </TableContainer>
         )}
       </DataTable>
+      <Pagination
+        page={currentPage}
+        pageSize={pageSize}
+        pageSizes={[5, 10, 20, 40, 50]}
+        itemsPerPageText="Items per page:"
+        totalItems={formattedTickets.length}
+      />
       {createModalOpen && (
         <CreateTicketModal
           isOpen={createModalOpen}
