@@ -13,6 +13,20 @@
       },
       "isReviewed": false,
       "isApproved": false
+    },
+    {
+      "id": "d2b5a19f-3fad-4db0-a732-60e258c7d59e",
+      "carNo": "WB65DC1234",
+      "parkingFrom": "2023-07-30T18:30:00.000Z",
+      "timeFrom": 1690655400000,
+      "parkingTo": "2023-07-30T18:30:00.000Z",
+      "timeTill": 1690763400000,
+      "parkingSlot": "P1E",
+      "createdBy": {
+        "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
+      },
+      "isReviewed": false,
+      "isApproved": false
     }
   ],
   "users": [

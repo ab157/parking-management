@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   Modal,
@@ -14,13 +14,11 @@ import {
 } from "@carbon/react";
 import { useAuthContext } from "../../context/AuthContext";
 import { createNewTicket, parkingSlots } from "../../utils/tickets";
-// import { useNavigate } from "react-router-dom";
 // CSS
 import "./CreateTicketModal.scss";
 import { convertTimeStringToTimeStamp } from "../../utils/formatDate";
 
 export const CreateTicketModal = ({ isOpen, onClose }) => {
-  // const navigate = useNavigate();
   const [carNo, setCarNo] = useState("");
   const [parkingFrom, setParkingFrom] = useState("");
   const [parkingFromTime, setParkingFromTime] = useState("");
@@ -29,19 +27,29 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [parkingSlot, setParkingSlot] = useState("");
   const [forWhom, setForWhom] = useState("self");
   const [userName, setUserName] = useState("");
-  const [carNoError, setCarNoError] = useState("");
   const { user: sessionUser } = useAuthContext();
+  const [error, setError] = useState("");
+
+  const timeFromRef = useRef();
+  const timeTillRef = useRef();
+  const carNoRegex = new RegExp("^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$");
+  const timeRegex = new RegExp("^(1[0-2]|0?[1-9]):[0-5][0-9]$");
 
   const handleCreateTicket = () => {
     const timeFrom = convertTimeStringToTimeStamp(
-      `${parkingFromTime.time} ${parkingFromTime.label}`,
+      `${parkingFromTime} ${timeFromRef.current.value}`,
       parkingFrom
     );
 
     const timeTill = convertTimeStringToTimeStamp(
-      `${parkingToTime.time} ${parkingToTime.label}`,
+      `${parkingToTime} ${timeTillRef.current.value}`,
       parkingTo
     );
+
+    if (timeFrom >= timeTill) {
+      setError("Parking To Time should be greater than Parking From Time");
+      return;
+    }
 
     let ticket = {
       carNo,
@@ -64,7 +72,6 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         },
       };
     }
-
     createNewTicket(ticket, (err, status) => {
       if (err) {
         return;
@@ -75,21 +82,9 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
     });
   };
 
-  const handleCarNoChange = (e) => {
-    const carNoValue = e.target.value;
-    setCarNo(carNoValue);
-
-    if (carNoValue.trim() === "") {
-      setCarNoError("");
-    } else if (!/^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/.test(carNoValue)) {
-      setCarNoError("Invalid format");
-    } else {
-      setCarNoError("");
-    }
-  };
-
   return (
     <Modal
+      aria-label="Modal"
       size="sm"
       open={isOpen}
       onRequestSubmit={handleCreateTicket}
@@ -97,6 +92,14 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       modalHeading="Create New Ticket"
       primaryButtonText="Create Ticket"
       secondaryButtonText="Cancel Ticket"
+      primaryButtonDisabled={
+        !carNo ||
+        !parkingFrom ||
+        !parkingFromTime ||
+        !parkingTo ||
+        !parkingToTime ||
+        !parkingSlot
+      }
       hasScrollingContent={true}
     >
       <RadioButtonGroup
@@ -136,9 +139,9 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         labelText="Car No"
         placeholder="Enter car No"
         value={carNo}
-        onChange={handleCarNoChange}
-        invalid={!!carNoError}
-        invalidText={carNoError}
+        onChange={(e) => setCarNo(e.target.value)}
+        invalid={carNo !== "" && !carNoRegex.test(carNo)}
+        invalidText={"Invalid Format"}
       />
 
       <DatePicker
@@ -174,44 +177,25 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         <TimePicker
           id="fromTime"
           labelText="Select Time From"
-          onChange={(e) =>
-            setParkingFromTime((prev) => {
-              return { ...prev, time: e.target.value };
-            })
-          }
-          value={parkingFromTime.time}
+          onChange={(e) => setParkingFromTime(e.target.value)}
+          value={parkingFromTime}
+          invalid={parkingFromTime !== "" && !timeRegex.test(parkingFromTime)}
+          invalidText={"The time should be 12 Hr Format"}
         >
-          <TimePickerSelect
-            id="time-picker-from-date"
-            onChange={(e) =>
-              setParkingFromTime((prev) => {
-                return { ...prev, label: e.target.value };
-              })
-            }
-          >
+          <TimePickerSelect id="time-picker-from-date" ref={timeFromRef}>
             <SelectItem value="AM" text="AM" />
             <SelectItem value="PM" text="PM" />
           </TimePickerSelect>
         </TimePicker>
-
         <TimePicker
           id="toTime"
           labelText="Select Time To"
-          onChange={(e) =>
-            setParkingToTime((prev) => {
-              return { ...prev, time: e.target.value };
-            })
-          }
-          value={parkingToTime.time}
+          onChange={(e) => setParkingToTime(e.target.value)}
+          value={parkingToTime}
+          invalid={parkingToTime !== "" && !timeRegex.test(parkingToTime)}
+          invalidText={"The time should be 12 Hr Format"}
         >
-          <TimePickerSelect
-            id="time-picker-to-date"
-            onChange={(e) =>
-              setParkingToTime((prev) => {
-                return { ...prev, label: e.target.value };
-              })
-            }
-          >
+          <TimePickerSelect id="time-picker-to-date" ref={timeTillRef}>
             <SelectItem value="AM" text="AM" />
             <SelectItem value="PM" text="PM" />
           </TimePickerSelect>
@@ -220,12 +204,13 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       <Dropdown
         id="parkingSlot"
         selectedItem={parkingSlot}
-        onChange={(e) => setParkingSlot(e.selectedItem.label)}
         items={parkingSlots}
         label="Select Parking Slot"
         titleText="Parking Slot"
+        onChange={(e) => setParkingSlot(e.selectedItem.label)}
         required
       />
+      {error && <p className="error">{error}</p>}
     </Modal>
   );
 };

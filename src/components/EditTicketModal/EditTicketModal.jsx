@@ -1,6 +1,5 @@
 import {
   Modal,
-  ModalBody,
   DatePicker,
   DatePickerInput,
   TextInput,
@@ -10,18 +9,27 @@ import {
   SelectItem,
 } from "@carbon/react";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { editTicket, parkingSlots } from "../../utils/tickets";
+import {
+  convertTimeStampToAMPM,
+  convertTimeStringToTimeStamp,
+} from "../../utils/formatDate";
 
 export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
-  const [ticketToUpdate, setTicketToUpdate] = useState();
+  const [ticketToUpdate, setTicketToUpdate] = useState(ticket);
+  const [timeFrom, setTimeFrom] = useState(
+    convertTimeStampToAMPM(ticketToUpdate.timeFrom).split(" ")
+  );
+  const [timeTill, setTimeTill] = useState(
+    convertTimeStampToAMPM(ticketToUpdate.timeTill).split(" ")
+  );
 
-  useEffect(() => {
-    setTicketToUpdate({
-      ...ticket,
-    });
-  }, [ticket]);
+  const [error, setError] = useState("");
+  const timeFromRef = useRef();
+  const timeTillRef = useRef();
+  const carNoRegex = new RegExp("^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$");
+  const timeRegex = new RegExp("^(1[0-2]|0?[1-9]):[0-5][0-9]$");
 
   function handleChange(field, value) {
     setTicketToUpdate((prev) => {
@@ -32,98 +40,159 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
     });
   }
 
-  function handleParkingSlotChange(e) {
-    setTicketToUpdate((prev) => {
-      return {
-        ...prev,
-        parkingSlot: e.selectedItem.label,
-      };
-    });
+  function handleTimeChange(timeString, date, timeField) {
+    const timeStamp = convertTimeStringToTimeStamp(`${timeString}`, date);
+    handleChange(timeField, timeStamp);
   }
 
   function handleEditTicket() {
-    editTicket(ticketToUpdate, (err, ticket) => {
-      if (err) return;
-      onClose();
-    });
+    handleTimeChange(
+      timeFrom.join(" "),
+      ticketToUpdate.parkingFrom,
+      "timeFrom"
+    );
+    handleTimeChange(timeTill.join(" "), ticketToUpdate.parkingTo, "timeTill");
+
+    if (ticketToUpdate.timeFrom >= ticketToUpdate.timeTill) {
+      setError("Parking To Time should be greater than Parking From Time");
+      return;
+    } else {
+      setError("");
+    }
+
+    if (!error) {
+      editTicket(ticketToUpdate, (err) => {
+        if (err) {
+          return;
+        } else {
+          setError("");
+          onClose();
+        }
+      });
+    }
   }
+
   return (
     <Modal
-      size="md"
+      aria-label="Modal"
+      size="sm"
       open={isOpen}
+      onRequestSubmit={handleEditTicket}
       onRequestClose={onClose}
       modalHeading="Edit Ticket"
-      primaryButtonText="Update"
+      primaryButtonText="Update Ticket"
       secondaryButtonText="Cancel"
-      onRequestSubmit={handleEditTicket}
     >
-      <ModalBody>
-        <TextInput
-          id="carNo"
-          name="carNo"
-          className="input"
-          labelText="Car No"
-          placeholder="Enter car No"
-          value={ticketToUpdate?.carNo}
-          onChange={(e) => handleChange("carNo", e.target.value)}
+      <TextInput
+        id="carNo"
+        name="carNo"
+        className="input"
+        labelText="Car No"
+        placeholder="Enter car No"
+        value={ticketToUpdate?.carNo}
+        onChange={(e) => handleChange("carNo", e.target.value)}
+        invalid={
+          ticketToUpdate.carNo !== "" && !carNoRegex.test(ticketToUpdate.carNo)
+        }
+        invalidText={"Invalid Format"}
+      />
+      <DatePicker
+        className="input"
+        datePickerType="single"
+        name="parkingFrom"
+        minDate={ticketToUpdate?.parkingFrom}
+        onChange={(date) => handleChange("parkingFrom", date[0].toISOString())}
+        value={ticketToUpdate?.parkingFrom}
+      >
+        <DatePickerInput
+          id="parkingFrom"
+          labelText="Parking from"
+          placeholder="mm/dd/yy"
+          size="md"
         />
-        <DatePicker
-          className="input"
-          datePickerType="single"
-          name="parkingFrom"
-          minDate={ticketToUpdate?.parkingFrom}
-          onChange={(date) =>
-            handleChange("parkingFrom", date[0].toISOString())
+      </DatePicker>
+      <DatePicker
+        className="input"
+        name="parkingTo"
+        datePickerType="single"
+        minDate={ticketToUpdate?.parkingFrom}
+        onChange={(date) => handleChange("parkingTo", date[0].toISOString())}
+        value={ticketToUpdate?.parkingTo}
+      >
+        <DatePickerInput
+          id="parkingTo"
+          labelText="Parking Till"
+          placeholder="mm/dd/yy"
+          size="md"
+        />
+      </DatePicker>
+      <div>
+        <TimePicker
+          id="fromTime"
+          labelText="Select Time From"
+          onChange={(e) => {
+            setTimeFrom((prev) => [e.target.value, prev[1]]);
+          }}
+          onBlur={() =>
+            handleTimeChange(
+              timeFrom.join(" "),
+              ticketToUpdate.parkingFrom,
+              "timeFrom"
+            )
           }
-          value={ticketToUpdate?.parkingFrom}
+          value={timeFrom[0]}
+          invalid={timeFrom[0] !== "" && !timeRegex.test(timeFrom[0])}
+          invalidText={"The time should be 12 Hr Format"}
         >
-          <DatePickerInput
-            id="parkingFrom"
-            labelText="Parking from"
-            placeholder="mm/dd/yy"
-            size="md"
-          />
-        </DatePicker>
-        <DatePicker
-          className="input"
-          name="parkingTo"
-          datePickerType="single"
-          minDate={ticketToUpdate?.parkingFrom}
-          onChange={(date) => handleChange("parkingTo", date[0].toISOString())}
-          value={ticketToUpdate?.parkingTo}
-        >
-          <DatePickerInput
-            id="parkingTo"
-            labelText="Parking Till"
-            placeholder="mm/dd/yy"
-            size="md"
-          />
-        </DatePicker>
-        <div>
-          <TimePicker id="fromTime" labelText="Select Time From">
-            <TimePickerSelect id="time-picker-from-date">
-              <SelectItem value="AM" text="AM" />
-              <SelectItem value="PM" text="PM" />
-            </TimePickerSelect>
-          </TimePicker>
+          <TimePickerSelect
+            id="time-picker-from-date"
+            ref={timeFromRef}
+            defaultValue={timeFrom[1]}
+            onChange={(e) => setTimeFrom((prev) => [prev[0], e.target.value])}
+          >
+            <SelectItem value="AM" text="AM" />
+            <SelectItem value="PM" text="PM" />
+          </TimePickerSelect>
+        </TimePicker>
 
-          <TimePicker id="toTime" labelText="Select Time To">
-            <TimePickerSelect id="time-picker-to-date">
-              <SelectItem value="AM" text="AM" />
-              <SelectItem value="PM" text="PM" />
-            </TimePickerSelect>
-          </TimePicker>
-        </div>
-        <Dropdown
-          id="parkingSlot"
-          name="parkingSlot"
-          selectedItem={ticketToUpdate?.parkingSlot}
-          items={parkingSlots}
-          label="Select Parking Slot"
-          titleText="Parking Slot"
-          onChange={handleParkingSlotChange}
-        />
-      </ModalBody>
+        <TimePicker
+          id="toTime"
+          labelText="Select Time To"
+          onChange={(e) => {
+            setTimeTill((prev) => [e.target.value, prev[1]]);
+          }}
+          onBlur={() =>
+            handleTimeChange(
+              timeTill.join(" "),
+              ticketToUpdate.parkingTo,
+              "timeTill"
+            )
+          }
+          value={timeTill[0]}
+          invalid={timeTill[0] !== "" && !timeRegex.test(timeTill[0])}
+          invalidText={"The time should be 12 Hr Format"}
+        >
+          <TimePickerSelect
+            id="time-picker-to-date"
+            ref={timeTillRef}
+            defaultValue={timeTill[1]}
+            onChange={(e) => setTimeTill((prev) => [prev[0], e.target.value])}
+          >
+            <SelectItem value="AM" text="AM" />
+            <SelectItem value="PM" text="PM" />
+          </TimePickerSelect>
+        </TimePicker>
+      </div>
+      <Dropdown
+        id="parkingSlot"
+        selectedItem={ticketToUpdate?.parkingSlot}
+        items={parkingSlots}
+        label="Select Parking Slot"
+        titleText="Parking Slot"
+        onChange={(e) => handleChange("parkingSlot", e.selectedItem.label)}
+        required
+      />
+      {error && <p className="error">{error}</p>}
     </Modal>
   );
 };
@@ -131,12 +200,17 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
 EditTicketModal.propTypes = {
   ticket: PropTypes.shape({
     id: PropTypes.string,
-    userId: PropTypes.string,
+    createdBy: PropTypes.shape({
+      userId: PropTypes.string,
+    }),
+    createdFor: PropTypes.shape({
+      name: PropTypes.string,
+    }),
     carNo: PropTypes.string,
     parkingFrom: PropTypes.string,
-    parkingFromTime: PropTypes.string,
+    timeFrom: PropTypes.number,
     parkingTo: PropTypes.string,
-    parkingToTime: PropTypes.string,
+    timeTill: PropTypes.number,
     parkingSlot: PropTypes.string,
   }),
   isOpen: PropTypes.bool,

@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <>
-      <Header className="header">
+      <Header className="header" aria-label="Header">
         <HeaderName className="header_name" prefix={null}>
           Parking Management
         </HeaderName>

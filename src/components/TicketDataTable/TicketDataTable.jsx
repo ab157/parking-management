@@ -180,6 +180,7 @@ const TicketDataTable = ({
       setFormattedTickets([getEmptyDataTable()]);
     }
   }, [tickets, formatTickets, getEmptyDataTable, sessionUser]);
+
   return (
     <div>
       {formattedTickets && (
@@ -203,9 +204,11 @@ const TicketDataTable = ({
                     onChange={(evt) => onInputChange(evt)}
                     disabled={!tickets.length}
                   />
-                  <Button onClick={() => openCreateModal(true)}>
-                    Create Ticket
-                  </Button>
+                  {sessionUser?.role === "USER" && (
+                    <Button onClick={() => openCreateModal(true)}>
+                      Create Ticket
+                    </Button>
+                  )}
                 </TableToolbarContent>
               </TableToolbar>
               <Table {...getTableProps()}>

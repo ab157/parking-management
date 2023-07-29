@@ -8,12 +8,17 @@
   }
 }
 
-.input {
-  &:not(:first-of-type) {
-    margin-top: 1rem;
-  }
+.date-time-picker {
+  margin-top: 1rem;
+  display: flex;
 }
 
 .cds--date-picker {
   gap: 1rem !important;
+}
+
+.error {
+  display: flex;
+  margin-top: 1rem;
+  color: red;
 }
