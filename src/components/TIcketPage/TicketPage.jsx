@@ -2,16 +2,16 @@ import "./TicketPage.scss";
 import TicketDataTable from "../TicketDataTable/TicketDataTable";
 import { PageHeader } from "@carbon/ibm-products/lib/components";
 import { Column, Grid } from "@carbon/react";
-import { fetchTickets } from "../../features/tickets";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import CreateTicketModal from "../CreateTicketModal/CreateTicketModal";
+import TicketDetailsModal from "../TicketDetailsModal/TicketDetailsModal";
+import EditTicketModal from "../EditTicketModal/EditTicketModal";
 
 const TicketPage = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchTickets()).then((data) => console.log(data));
-  }, [dispatch]);
+  const [selectedTicket, setSelectedTicket] = useState(undefined);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   return (
     <>
@@ -21,9 +21,34 @@ const TicketPage = () => {
       />
       <Grid fullWidth>
         <Column lg={16}>
-          <TicketDataTable />
+          <TicketDataTable
+            selectTicket={setSelectedTicket}
+            openCreateModal={setCreateModalOpen}
+            openEditModal={setEditModalOpen}
+            openDetailsModal={setDetailsModalOpen}
+          />
         </Column>
       </Grid>
+      {createModalOpen && (
+        <CreateTicketModal
+          isOpen={createModalOpen}
+          onClose={() => setCreateModalOpen(false)}
+        />
+      )}
+      {detailsModalOpen && (
+        <TicketDetailsModal
+          ticket={selectedTicket}
+          isOpen={detailsModalOpen}
+          onClose={() => setDetailsModalOpen(false)}
+        />
+      )}
+      {editModalOpen && (
+        <EditTicketModal
+          ticket={selectedTicket}
+          isOpen={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+        />
+      )}
     </>
   );
 };

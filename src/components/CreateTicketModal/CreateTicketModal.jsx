@@ -14,12 +14,13 @@ import {
 } from "@carbon/react";
 import { useAuthContext } from "../../context/AuthContext";
 import { createNewTicket, parkingSlots } from "../../utils/tickets";
-import { redirect } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 // CSS
 import "./CreateTicketModal.scss";
 import { convertTimeStringToTimeStamp } from "../../utils/formatDate";
 
 export const CreateTicketModal = ({ isOpen, onClose }) => {
+  // const navigate = useNavigate();
   const [carNo, setCarNo] = useState("");
   const [parkingFrom, setParkingFrom] = useState("");
   const [parkingFromTime, setParkingFromTime] = useState("");
@@ -41,9 +42,6 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       `${parkingToTime.time} ${parkingToTime.label}`,
       parkingTo
     );
-
-    console.log(timeFrom);
-    console.log(timeTill);
 
     let ticket = {
       carNo,
@@ -75,7 +73,6 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         onClose();
       }
     });
-    redirect("/tickets");
   };
 
   const handleCarNoChange = (e) => {
@@ -161,7 +158,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       <DatePicker
         className="input"
         datePickerType="single"
-        minDate={new Date().toLocaleDateString()}
+        minDate={new Date(parkingFrom).toLocaleDateString()}
         onChange={(date) => setParkingTo(date[0].toISOString())}
         value={parkingTo}
       >

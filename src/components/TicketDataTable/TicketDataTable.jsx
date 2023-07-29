@@ -1,4 +1,7 @@
 /* eslint-disable no-unused-vars */
+import { useEffect, useState, useContext, useCallback } from "react";
+import { PropTypes } from "prop-types";
+import { format } from "date-fns";
 import {
   DataTable,
   TableContainer,
@@ -15,42 +18,40 @@ import {
   Link,
   Pagination,
 } from "@carbon/react";
-import { NoDataEmptyState } from "@carbon/ibm-products/lib/components";
 import { Edit, Add } from "@carbon/icons-react";
-import CreateTicketModal from "../CreateTicketModal/CreateTicketModal";
-import { useEffect, useState, useContext, useCallback } from "react";
-import { format } from "date-fns";
-import TicketDetailsModal from "../TicketDetailsModal/TicketDetailsModal";
-import "./TicketDataTable.scss";
-import EditTicketModal from "../EditTicketModal/EditTicketModal";
+import { NoDataEmptyState } from "@carbon/ibm-products/lib/components";
 import { AuthContext } from "../../context/AuthContext";
 import { getHeadersForTicketsTable, getTickets } from "../../utils/tickets";
-import { getAllUsers, getUserById } from "../../utils/users";
+import { getAllUsers } from "../../utils/users";
+import "./TicketDataTable.scss";
 
-const TicketDataTable = () => {
+const TicketDataTable = ({
+  selectTicket,
+  openCreateModal,
+  openEditModal,
+  openDetailsModal,
+}) => {
+  console.log("TicketDataTable");
   const [tickets, setTickets] = useState([]);
-  const [formattedTickets, setFormattedTickets] = useState([]);
   const [users, setUsers] = useState([]);
-  const [selectedTicket, setSelectedTicket] = useState(undefined);
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [formattedTickets, setFormattedTickets] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const { user: sessionUser } = useContext(AuthContext);
-
   const pageSize = 5;
 
   const handleTicketClick = useCallback(
     (ticketId) => {
       const ticket = tickets.filter((item) => item.id === ticketId)[0];
-      setSelectedTicket(ticket);
-      setDetailsModalOpen(true);
+      selectTicket(ticket);
+      openDetailsModal(true);
     },
-    [tickets]
+    [tickets, selectTicket, openDetailsModal]
   );
 
   const formatTickets = useCallback(
     (tickets, user) => {
+      console.log("TicketDataTable formatTickets");
+
       let modifiedTickets = [];
       modifiedTickets = tickets.map((item) => {
         return {
@@ -64,8 +65,8 @@ const TicketDataTable = () => {
               <Button
                 kind="ghost"
                 onClick={() => {
-                  setSelectedTicket(item);
-                  setEditModalOpen(true);
+                  selectTicket(item);
+                  openEditModal(true);
                 }}
               >
                 <Edit />
@@ -74,6 +75,12 @@ const TicketDataTable = () => {
           ),
         };
       });
+
+      if (user?.role === "USER") {
+        return modifiedTickets.filter(
+          (item) => item.createdBy.userId === user.id
+        );
+      }
 
       if (user?.role === "REVIEWER") {
         modifiedTickets = modifiedTickets.map((item) => {
@@ -117,7 +124,7 @@ const TicketDataTable = () => {
 
       return modifiedTickets;
     },
-    [users]
+    [users, openEditModal, selectTicket]
   );
 
   const getEmptyDataTable = useCallback(() => {
@@ -131,7 +138,7 @@ const TicketDataTable = () => {
           size="lg"
           className="tickets_noDataState"
           action={{
-            onClick: () => setCreateModalOpen(true),
+            onClick: () => openCreateModal(true),
             renderIcon: Add,
             iconDescription: "Add icon",
             text: "Create Ticket",
@@ -145,30 +152,29 @@ const TicketDataTable = () => {
       parkingSlot: "",
       actions: " ",
     };
+  }, [openCreateModal]);
+
+  useEffect(() => {
+    getTickets((err, tickets) => {
+      if (err) {
+        return;
+      }
+      setTickets(tickets);
+    });
+
+    return () => {
+      setTickets([]);
+    };
   }, []);
 
   useEffect(() => {
-    if (sessionUser) {
-      getTickets((err, tickets) => {
-        if (err) {
-          return;
-        }
-        if (sessionUser?.role === "USER") {
-          setTickets(
-            tickets.filter(
-              (ticket) => ticket.createdBy.userId === sessionUser?.id
-            )
-          );
-        } else {
-          setTickets(tickets);
-        }
+    if (sessionUser?.role === "ADMIN" || sessionUser?.role === "REVIEWER") {
+      getAllUsers((err, users) => {
+        if (err) return;
+        setUsers(users);
       });
     }
-
-    if (sessionUser?.role === "ADMIN" || sessionUser?.role === "REVIEWER") {
-      getAllUsers((err, users) => setUsers(users));
-    }
-  }, [sessionUser]);
+  }, [sessionUser?.role]);
 
   useEffect(() => {
     if (tickets.length > 0) {
@@ -176,7 +182,8 @@ const TicketDataTable = () => {
     } else {
       setFormattedTickets([getEmptyDataTable()]);
     }
-  }, [sessionUser, tickets, formatTickets, getEmptyDataTable]);
+  }, [tickets, formatTickets, getEmptyDataTable, sessionUser]);
+
   return (
     <div>
       {formattedTickets && (
@@ -200,7 +207,7 @@ const TicketDataTable = () => {
                     onChange={(evt) => onInputChange(evt)}
                     disabled={!tickets.length}
                   />
-                  <Button onClick={() => setCreateModalOpen(true)}>
+                  <Button onClick={() => openCreateModal(true)}>
                     Create Ticket
                   </Button>
                 </TableToolbarContent>
@@ -247,28 +254,17 @@ const TicketDataTable = () => {
         itemsPerPageText="Items per page:"
         totalItems={formattedTickets.length}
       /> */}
-      {createModalOpen && (
-        <CreateTicketModal
-          isOpen={createModalOpen}
-          onClose={() => setCreateModalOpen(false)}
-        />
-      )}
-      {detailsModalOpen && (
-        <TicketDetailsModal
-          ticket={selectedTicket}
-          isOpen={detailsModalOpen}
-          onClose={() => setDetailsModalOpen(false)}
-        />
-      )}
-      {editModalOpen && (
-        <EditTicketModal
-          ticket={selectedTicket}
-          isOpen={editModalOpen}
-          onClose={() => setEditModalOpen(false)}
-        />
-      )}
     </div>
   );
+};
+
+TicketDataTable.propTypes = {
+  tickets: PropTypes.array,
+  users: PropTypes.array,
+  selectTicket: PropTypes.func,
+  openCreateModal: PropTypes.func,
+  openEditModal: PropTypes.func,
+  openDetailsModal: PropTypes.func,
 };
 
 export default TicketDataTable;
