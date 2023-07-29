@@ -31,7 +31,6 @@ const TicketDataTable = ({
   openEditModal,
   openDetailsModal,
 }) => {
-  console.log("TicketDataTable");
   const [tickets, setTickets] = useState([]);
   const [users, setUsers] = useState([]);
   const [formattedTickets, setFormattedTickets] = useState([]);
@@ -50,8 +49,6 @@ const TicketDataTable = ({
 
   const formatTickets = useCallback(
     (tickets, user) => {
-      console.log("TicketDataTable formatTickets");
-
       let modifiedTickets = [];
       modifiedTickets = tickets.map((item) => {
         return {
@@ -130,9 +127,6 @@ const TicketDataTable = ({
   const getEmptyDataTable = useCallback(() => {
     return {
       id: "",
-      createdBy: {
-        userId: "",
-      },
       carNo: (
         <NoDataEmptyState
           size="lg"
@@ -148,9 +142,11 @@ const TicketDataTable = ({
         />
       ),
       parkingFrom: "",
+      timeFrom: "",
       parkingTo: "",
+      timeTill: "",
       parkingSlot: "",
-      actions: " ",
+      actions: "",
     };
   }, [openCreateModal]);
 
@@ -177,13 +173,13 @@ const TicketDataTable = ({
   }, [sessionUser?.role]);
 
   useEffect(() => {
-    if (tickets.length > 0) {
-      setFormattedTickets(formatTickets(tickets, sessionUser));
+    const ticketsFormatted = formatTickets(tickets, sessionUser);
+    if (ticketsFormatted.length !== 0) {
+      setFormattedTickets(ticketsFormatted);
     } else {
       setFormattedTickets([getEmptyDataTable()]);
     }
   }, [tickets, formatTickets, getEmptyDataTable, sessionUser]);
-
   return (
     <div>
       {formattedTickets && (
