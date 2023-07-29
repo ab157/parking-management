@@ -76,6 +76,10 @@ export function getHeadersForTicketsTable(userRole) {
       header: "Parking Slot",
     },
     {
+      key: "status",
+      header: "Status",
+    },
+    {
       key: "actions",
       header: "",
     },

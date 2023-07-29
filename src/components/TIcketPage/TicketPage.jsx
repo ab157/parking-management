@@ -6,7 +6,7 @@ import { useState, useEffect, useContext } from "react";
 import CreateTicketModal from "../CreateTicketModal/CreateTicketModal";
 import TicketDetailsModal from "../TicketDetailsModal/TicketDetailsModal";
 import EditTicketModal from "../EditTicketModal/EditTicketModal";
-import { getTickets } from "../../utils/tickets";
+import { editTicket, getTickets } from "../../utils/tickets";
 import { AuthContext } from "../../context/AuthContext";
 import { getAllUsers } from "../../utils/users";
 
@@ -27,7 +27,7 @@ const TicketPage = () => {
       }
       setTickets(tickets);
     });
-  }, [createModalOpen, editModalOpen]);
+  }, [createModalOpen, editModalOpen, selectedTicket]);
 
   useEffect(() => {
     if (sessionUser?.role === "ADMIN" || sessionUser?.role === "REVIEWER") {
@@ -37,6 +37,63 @@ const TicketPage = () => {
       });
     }
   }, [sessionUser?.role]);
+
+  function reviewHandler(ticket, reviewTicket) {
+    if (reviewTicket) {
+      const updatedTicket = {
+        ...ticket,
+        status: {
+          ...ticket.status,
+          type: "Under Approval",
+          isReviewed: true,
+          reviewSuccess: true,
+          sendToApproval: true,
+        },
+      };
+      editTicket(updatedTicket, (err, ticket) => {
+        if (err) {
+          return;
+        }
+        setSelectedTicket(ticket);
+      });
+    } else {
+      const updatedTicket = {
+        ...ticket,
+        status: {
+          ...ticket.status,
+          type: "Edit requested",
+          sendToReview: false,
+          isReviewed: true,
+          reviewSuccess: false,
+        },
+      };
+      editTicket(updatedTicket, (err) => {
+        if (err) {
+          return;
+        }
+        setSelectedTicket(ticket);
+      });
+    }
+  }
+
+  function sendToReviewHandler(ticket) {
+    const updatedTicket = {
+      ...ticket,
+      status: {
+        ...ticket.status,
+        type: "Under Review",
+        sendToReview: true,
+        isReviewed: false,
+        reviewSuccess: null,
+      },
+    };
+    editTicket(updatedTicket, (err, t) => {
+      if (err) {
+        return;
+      }
+      setSelectedTicket(t);
+    });
+  }
 
   return (
     <>
@@ -53,6 +110,8 @@ const TicketPage = () => {
             openCreateModal={setCreateModalOpen}
             openEditModal={setEditModalOpen}
             openDetailsModal={setDetailsModalOpen}
+            reviewTicketHandler={reviewHandler}
+            sendToReview={sendToReviewHandler}
           />
         </Column>
       </Grid>

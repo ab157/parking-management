@@ -61,8 +61,15 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       createdBy: {
         userId: sessionUser?.id,
       },
-      isReviewed: false,
-      isApproved: false,
+      status: {
+        type: "Ready for Review",
+        sendToReview: false,
+        isReviewed: false,
+        reviewSuccess: null,
+        sendToApproval: false,
+        isApproved: false,
+        approveSuccess: null,
+      },
     };
     if (forWhom !== "self") {
       ticket = {
@@ -90,7 +97,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
       onRequestSubmit={handleCreateTicket}
       onRequestClose={onClose}
       modalHeading="Create New Ticket"
-      primaryButtonText="Create Ticket"
+      primaryButtonText="Create and Send to Review"
       secondaryButtonText="Cancel Ticket"
       primaryButtonDisabled={
         !carNo ||
