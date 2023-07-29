@@ -3,9 +3,12 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { getUserById } from "../../utils/users";
-
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 export const TicketDetailsModal = ({ ticket, isOpen, onClose }) => {
   const [user, setUser] = useState("");
+  const { user: sessionUser } = useContext(AuthContext);
+  const role = sessionUser?.role;
 
   useEffect(() => {
     getUserById(ticket?.createdBy?.userId, (err, user) => {
@@ -25,7 +28,13 @@ export const TicketDetailsModal = ({ ticket, isOpen, onClose }) => {
       open={isOpen}
       onRequestClose={onClose}
       modalHeading="Ticket Details"
-      passiveModal={true}
+      passiveModal={role === "USER"}
+      primaryButtonText={
+        role === "REVIEWER" ? "Mark as Reviewed" : "Approve Parking Ticket"
+      }
+      secondaryButtonText={
+        role === "REVIEWER" ? "Send back to Edit" : "Send back to Review"
+      }
     >
       <ModalBody>
         <h5>Ticket Information</h5>

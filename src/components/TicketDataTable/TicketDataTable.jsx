@@ -21,18 +21,17 @@ import {
 import { Edit, Add } from "@carbon/icons-react";
 import { NoDataEmptyState } from "@carbon/ibm-products/lib/components";
 import { AuthContext } from "../../context/AuthContext";
-import { getHeadersForTicketsTable, getTickets } from "../../utils/tickets";
-import { getAllUsers } from "../../utils/users";
+import { getHeadersForTicketsTable } from "../../utils/tickets";
 import "./TicketDataTable.scss";
 
 const TicketDataTable = ({
+  tickets,
+  users,
   selectTicket,
   openCreateModal,
   openEditModal,
   openDetailsModal,
 }) => {
-  const [tickets, setTickets] = useState([]);
-  const [users, setUsers] = useState([]);
   const [formattedTickets, setFormattedTickets] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const { user: sessionUser } = useContext(AuthContext);
@@ -149,28 +148,6 @@ const TicketDataTable = ({
       actions: "",
     };
   }, [openCreateModal]);
-
-  useEffect(() => {
-    getTickets((err, tickets) => {
-      if (err) {
-        return;
-      }
-      setTickets(tickets);
-    });
-
-    return () => {
-      setTickets([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (sessionUser?.role === "ADMIN" || sessionUser?.role === "REVIEWER") {
-      getAllUsers((err, users) => {
-        if (err) return;
-        setUsers(users);
-      });
-    }
-  }, [sessionUser?.role]);
 
   useEffect(() => {
     const ticketsFormatted = formatTickets(tickets, sessionUser);
