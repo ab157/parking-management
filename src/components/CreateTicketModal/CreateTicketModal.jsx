@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 import {
   Modal,
@@ -12,7 +12,7 @@ import {
   TimePickerSelect,
   SelectItem,
 } from "@carbon/react";
-import { useAuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { createNewTicket, parkingSlots } from "../../utils/tickets";
 // CSS
 import "./CreateTicketModal.scss";
@@ -27,7 +27,7 @@ export const CreateTicketModal = ({ isOpen, onClose, occupiedSlots }) => {
   const [parkingSlot, setParkingSlot] = useState("");
   const [forWhom, setForWhom] = useState("self");
   const [userName, setUserName] = useState("");
-  const { user: sessionUser } = useAuthContext();
+  const { user: sessionUser } = useContext(AuthContext);
   const [error, setError] = useState("");
   // State to maintain actual time with AMPM
   const [timeFrom, setTimeFrom] = useState("");

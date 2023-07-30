@@ -1,11 +1,11 @@
 import "./App.scss";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Header, HeaderName } from "@carbon/react";
-import { useEffect } from "react";
-import { useAuthContext } from "./context/AuthContext";
+import { useEffect, useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 const App = () => {
-  const { user, setUser } = useAuthContext();
+  const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {

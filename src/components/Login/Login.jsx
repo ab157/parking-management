@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   TextInput,
   Button,
@@ -7,7 +7,7 @@ import {
 } from "@carbon/react";
 import { Form, useNavigate, redirect } from "react-router-dom";
 import validator from "validator";
-import { useAuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import "./Login.scss";
 import { loginUser } from "../../utils/users";
 
@@ -18,7 +18,7 @@ const LoginForm = () => {
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useAuthContext();
+  const { setUser } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();

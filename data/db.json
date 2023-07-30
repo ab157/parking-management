@@ -1,5 +1,48 @@
 {
-  "tickets": [],
+  "tickets": [
+    {
+      "id": "eafda688-69d3-49da-a302-df2547fa5a19",
+      "carNo": "WB65DC1234",
+      "parkingFrom": "2023-07-29T18:30:00.000Z",
+      "timeFrom": 1690687800000,
+      "parkingTo": "2023-07-29T18:30:00.000Z",
+      "timeTill": 1690720200000,
+      "parkingSlot": "P1B",
+      "createdBy": {
+        "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
+      },
+      "status": {
+        "type": "Edit requested",
+        "sendToReview": false,
+        "isReviewed": false,
+        "reviewSuccess": false,
+        "sendToApproval": false,
+        "isApproved": false,
+        "approveSuccess": false
+      }
+    },
+    {
+      "id": "a4d96c52-fefd-49df-a08c-b925cab8f5cc",
+      "carNo": "MH12AB2345",
+      "parkingFrom": "2023-07-29T18:30:00.000Z",
+      "timeFrom": 1690691400000,
+      "parkingTo": "2023-07-29T18:30:00.000Z",
+      "timeTill": 1690720200000,
+      "parkingSlot": "P1C",
+      "createdBy": {
+        "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
+      },
+      "status": {
+        "type": "Ready for Review",
+        "sendToReview": false,
+        "isReviewed": false,
+        "reviewSuccess": null,
+        "sendToApproval": false,
+        "isApproved": false,
+        "approveSuccess": null
+      }
+    }
+  ],
   "users": [
     {
       "id": "0c8ccff7-71c9-4447-bcef-1d4910019b93",
