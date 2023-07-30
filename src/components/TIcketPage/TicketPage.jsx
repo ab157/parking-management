@@ -11,16 +11,16 @@ import { AuthContext } from "../../context/AuthContext";
 import { getAllUsers } from "../../utils/users";
 
 const TicketPage = () => {
-  const [selectedTicket, setSelectedTicket] = useState(undefined);
+  const [selectedTicket, setSelectedTicket] = useState("");
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [tickets, setTickets] = useState([]);
   const [users, setUsers] = useState([]);
+  const [parkingSlots, setParkingSlots] = useState([]);
   const { user: sessionUser } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log("TicketsPage");
     getTickets((err, tickets) => {
       if (err) {
         return;
@@ -37,6 +37,18 @@ const TicketPage = () => {
       });
     }
   }, [sessionUser?.role]);
+
+  useEffect(() => {
+    const slotsArray = tickets.map((ticket) => {
+      return {
+        label: ticket.parkingSlot,
+        occupiedFrom: ticket.timeFrom,
+        occupiedTill: ticket.timeTill,
+      };
+    });
+
+    setParkingSlots(slotsArray);
+  }, [tickets]);
 
   // Approve Handler
   function approveHandler(ticket, isTicketApproved) {
@@ -138,7 +150,6 @@ const TicketPage = () => {
       setSelectedTicket(t);
     });
   }
-
   return (
     <>
       <PageHeader
@@ -164,6 +175,7 @@ const TicketPage = () => {
         <CreateTicketModal
           isOpen={createModalOpen}
           onClose={() => setCreateModalOpen(false)}
+          occupiedSlots={parkingSlots}
         />
       )}
       {detailsModalOpen && (
@@ -176,6 +188,7 @@ const TicketPage = () => {
       {editModalOpen && (
         <EditTicketModal
           ticket={selectedTicket}
+          occupiedSlots={parkingSlots}
           isOpen={editModalOpen}
           onClose={() => setEditModalOpen(false)}
         />

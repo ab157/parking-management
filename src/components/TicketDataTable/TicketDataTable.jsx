@@ -79,6 +79,7 @@ const TicketDataTable = ({
             <div>
               <Button
                 kind="ghost"
+                disabled={item.status.sendToReview}
                 onClick={() => {
                   selectTicket(item);
                   openEditModal(true);

@@ -18,7 +18,7 @@ import { createNewTicket, parkingSlots } from "../../utils/tickets";
 import "./CreateTicketModal.scss";
 import { convertTimeStringToTimeStamp } from "../../utils/formatDate";
 
-export const CreateTicketModal = ({ isOpen, onClose }) => {
+export const CreateTicketModal = ({ isOpen, onClose, occupiedSlots }) => {
   const [carNo, setCarNo] = useState("");
   const [parkingFrom, setParkingFrom] = useState("");
   const [parkingFromTime, setParkingFromTime] = useState("");
@@ -29,23 +29,36 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
   const [userName, setUserName] = useState("");
   const { user: sessionUser } = useAuthContext();
   const [error, setError] = useState("");
+  // State to maintain actual time with AMPM
+  const [timeFrom, setTimeFrom] = useState("");
+  const [timeTill, setTimeTill] = useState("");
 
   const timeFromRef = useRef();
   const timeTillRef = useRef();
   const carNoRegex = new RegExp("^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$");
   const timeRegex = new RegExp("^(1[0-2]|0?[1-9]):[0-5][0-9]$");
 
+  const [slotIsOccupied, setSlotIsOccupied] = useState(false);
+
+  function isSlotAvailable(parkingSlot, timeFrom, timeTill) {
+    for (let slot of occupiedSlots) {
+      if (String(slot.label) === String(parkingSlot)) {
+        if (slot.occupiedFrom <= timeFrom && slot.occupiedTill >= timeTill) {
+          setSlotIsOccupied(true);
+        } else if (
+          slot.occupiedFrom >= timeFrom &&
+          slot.occupiedFrom <= timeTill
+        ) {
+          setSlotIsOccupied(true);
+        }
+        return;
+      } else {
+        setSlotIsOccupied(false);
+      }
+    }
+  }
+
   const handleCreateTicket = () => {
-    const timeFrom = convertTimeStringToTimeStamp(
-      `${parkingFromTime} ${timeFromRef.current.value}`,
-      parkingFrom
-    );
-
-    const timeTill = convertTimeStringToTimeStamp(
-      `${parkingToTime} ${timeTillRef.current.value}`,
-      parkingTo
-    );
-
     if (timeFrom >= timeTill) {
       setError("Parking To Time should be greater than Parking From Time");
       return;
@@ -105,7 +118,8 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         !parkingFromTime ||
         !parkingTo ||
         !parkingToTime ||
-        !parkingSlot
+        !parkingSlot ||
+        slotIsOccupied
       }
       hasScrollingContent={true}
     >
@@ -156,6 +170,16 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         datePickerType="single"
         minDate={new Date().toLocaleDateString()}
         onChange={(date) => setParkingFrom(date[0].toISOString())}
+        onBlur={() => {
+          if (parkingFromTime) {
+            setTimeFrom(
+              convertTimeStringToTimeStamp(
+                `${parkingFromTime} ${timeFromRef.current.value}`,
+                parkingFrom
+              )
+            );
+          }
+        }}
         value={parkingFrom}
       >
         <DatePickerInput
@@ -170,6 +194,16 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         datePickerType="single"
         minDate={new Date(parkingFrom).toLocaleDateString()}
         onChange={(date) => setParkingTo(date[0].toISOString())}
+        onBlur={() => {
+          if (parkingToTime) {
+            setTimeTill(
+              convertTimeStringToTimeStamp(
+                `${parkingToTime} ${timeTillRef.current.value}`,
+                parkingTo
+              )
+            );
+          }
+        }}
         value={parkingTo}
       >
         <DatePickerInput
@@ -185,6 +219,14 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
           id="fromTime"
           labelText="Select Time From"
           onChange={(e) => setParkingFromTime(e.target.value)}
+          onBlur={() =>
+            setTimeFrom(
+              convertTimeStringToTimeStamp(
+                `${parkingFromTime} ${timeFromRef.current.value}`,
+                parkingFrom
+              )
+            )
+          }
           value={parkingFromTime}
           invalid={parkingFromTime !== "" && !timeRegex.test(parkingFromTime)}
           invalidText={"The time should be 12 Hr Format"}
@@ -198,6 +240,14 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
           id="toTime"
           labelText="Select Time To"
           onChange={(e) => setParkingToTime(e.target.value)}
+          onBlur={() =>
+            setTimeTill(
+              convertTimeStringToTimeStamp(
+                `${parkingToTime} ${timeTillRef.current.value}`,
+                parkingTo
+              )
+            )
+          }
           value={parkingToTime}
           invalid={parkingToTime !== "" && !timeRegex.test(parkingToTime)}
           invalidText={"The time should be 12 Hr Format"}
@@ -214,7 +264,12 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
         items={parkingSlots}
         label="Select Parking Slot"
         titleText="Parking Slot"
-        onChange={(e) => setParkingSlot(e.selectedItem.label)}
+        onChange={(e) => {
+          setParkingSlot(e.selectedItem.label);
+          isSlotAvailable(e.selectedItem.label, timeFrom, timeTill);
+        }}
+        invalid={slotIsOccupied}
+        invalidText={"The slot for this date and time is not available"}
         required
       />
       {error && <p className="error">{error}</p>}
@@ -225,6 +280,7 @@ export const CreateTicketModal = ({ isOpen, onClose }) => {
 CreateTicketModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  occupiedSlots: PropTypes.array,
 };
 
 export default CreateTicketModal;

@@ -16,7 +16,7 @@ import {
   convertTimeStringToTimeStamp,
 } from "../../utils/formatDate";
 
-export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
+export const EditTicketModal = ({ ticket, isOpen, onClose, occupiedSlots }) => {
   const [ticketToUpdate, setTicketToUpdate] = useState(ticket);
   const [timeFrom, setTimeFrom] = useState(
     convertTimeStampToAMPM(ticketToUpdate.timeFrom).split(" ")
@@ -24,6 +24,26 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
   const [timeTill, setTimeTill] = useState(
     convertTimeStampToAMPM(ticketToUpdate.timeTill).split(" ")
   );
+
+  function isSlotAvailable(parkingSlot, timeFrom, timeTill) {
+    for (let slot of occupiedSlots) {
+      if (String(slot.label) === String(parkingSlot)) {
+        if (slot.occupiedFrom <= timeFrom && slot.occupiedTill >= timeTill) {
+          setSlotIsOccupied(true);
+        } else if (
+          slot.occupiedFrom >= timeFrom &&
+          slot.occupiedFrom <= timeTill
+        ) {
+          setSlotIsOccupied(true);
+        }
+        return;
+      } else {
+        setSlotIsOccupied(false);
+      }
+    }
+  }
+
+  const [slotIsOccupied, setSlotIsOccupied] = useState(false);
 
   const [error, setError] = useState("");
   const timeFromRef = useRef();
@@ -46,13 +66,6 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
   }
 
   function handleEditTicket() {
-    handleTimeChange(
-      timeFrom.join(" "),
-      ticketToUpdate.parkingFrom,
-      "timeFrom"
-    );
-    handleTimeChange(timeTill.join(" "), ticketToUpdate.parkingTo, "timeTill");
-
     if (ticketToUpdate.timeFrom >= ticketToUpdate.timeTill) {
       setError("Parking To Time should be greater than Parking From Time");
       return;
@@ -82,6 +95,7 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
       modalHeading="Edit Ticket"
       primaryButtonText="Update Ticket"
       secondaryButtonText="Cancel"
+      primaryButtonDisabled={slotIsOccupied}
     >
       <TextInput
         id="carNo"
@@ -189,7 +203,16 @@ export const EditTicketModal = ({ ticket, isOpen, onClose }) => {
         items={parkingSlots}
         label="Select Parking Slot"
         titleText="Parking Slot"
-        onChange={(e) => handleChange("parkingSlot", e.selectedItem.label)}
+        onChange={(e) => {
+          handleChange("parkingSlot", e.selectedItem.label);
+          isSlotAvailable(
+            e.selectedItem.label,
+            ticketToUpdate.timeFrom,
+            ticketToUpdate.timeTill
+          );
+        }}
+        invalid={slotIsOccupied}
+        invalidText={"The slot for this date and time is not available"}
         required
       />
       {error && <p className="error">{error}</p>}
@@ -215,6 +238,7 @@ EditTicketModal.propTypes = {
   }),
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
+  occupiedSlots: PropTypes.array,
 };
 
 export default EditTicketModal;
