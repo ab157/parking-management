@@ -7,18 +7,63 @@
       "timeFrom": 1690677000000,
       "parkingTo": "2023-07-30T18:30:00.000Z",
       "timeTill": 1690799400000,
-      "parkingSlot": "P1A",
+      "parkingSlot": "P1B",
       "createdBy": {
         "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
       },
       "status": {
-        "type": "Edit requested",
-        "sendToReview": false,
+        "type": "Approved",
+        "sendToReview": true,
         "isReviewed": true,
+        "reviewSuccess": true,
+        "sendToApproval": true,
+        "isApproved": true,
+        "approveSuccess": true
+      }
+    },
+    {
+      "id": "868ec62b-2028-483a-a84e-ffb35ef3fedc",
+      "carNo": "MH12AB2345",
+      "parkingFrom": "2023-07-30T18:30:00.000Z",
+      "timeFrom": 1690763400000,
+      "parkingTo": "2023-07-30T18:30:00.000Z",
+      "timeTill": 1690799400000,
+      "parkingSlot": "P1C",
+      "createdBy": {
+        "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
+      },
+      "status": {
+        "type": "Approved",
+        "sendToReview": true,
+        "isReviewed": true,
+        "reviewSuccess": true,
+        "sendToApproval": true,
+        "isApproved": true,
+        "approveSuccess": true
+      },
+      "createdFor": {
+        "name": "Arun Kumar"
+      }
+    },
+    {
+      "id": "21f973a2-100d-4fb1-afbc-0c9be250a84b",
+      "carNo": "WB65DC1234",
+      "parkingFrom": "2023-07-29T18:30:00.000Z",
+      "timeFrom": 1690691400000,
+      "parkingTo": "2023-07-29T18:30:00.000Z",
+      "timeTill": 1690695000000,
+      "parkingSlot": "P1C",
+      "createdBy": {
+        "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
+      },
+      "status": {
+        "type": "Re-review requested",
+        "sendToReview": true,
+        "isReviewed": false,
         "reviewSuccess": false,
         "sendToApproval": false,
         "isApproved": false,
-        "approveSuccess": null
+        "approveSuccess": false
       }
     }
   ],

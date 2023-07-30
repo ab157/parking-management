@@ -34,6 +34,7 @@ const TicketDataTable = ({
   openDetailsModal,
   reviewTicketHandler,
   sendToReview,
+  approveTicketHandler,
 }) => {
   const [formattedTickets, setFormattedTickets] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,7 +75,7 @@ const TicketDataTable = ({
               {item.status.type}
             </Tag>
           ),
-          actions: (
+          actions: !item.status.isApproved && (
             <div>
               <Button
                 kind="ghost"
@@ -110,14 +111,11 @@ const TicketDataTable = ({
           if (user) {
             return {
               ...item,
-              actions: (
+              actions: originalTicket.status.sendToReview && (
                 <div>
                   <Button
                     kind="ghost"
-                    disabled={
-                      originalTicket.status.reviewSuccess ||
-                      originalTicket.status.isReviewed
-                    }
+                    disabled={originalTicket.status.reviewSuccess}
                     onClick={() => reviewTicketHandler(originalTicket, true)}
                   >
                     {originalTicket.status.isReviewed
@@ -127,7 +125,7 @@ const TicketDataTable = ({
 
                   <Button
                     kind="ghost"
-                    disabled={originalTicket.status.isReviewed}
+                    disabled={originalTicket.status.reviewSuccess}
                     onClick={() => reviewTicketHandler(originalTicket, false)}
                   >
                     Send Back to Edit
@@ -145,13 +143,30 @@ const TicketDataTable = ({
       if (user?.role === "ADMIN") {
         modifiedTickets = modifiedTickets.map((item) => {
           const user = users.find((user) => user.id === item.createdBy.userId);
+          const originalTicket = tickets.find(
+            (ticket) => ticket.id === item.id
+          );
           if (user) {
             return {
               ...item,
-              actions: (
+              actions: originalTicket.status.sendToApproval && (
                 <div>
-                  <Button kind="ghost">Approve Ticket</Button>
-                  <Button kind="ghost">Send Back to Review</Button>
+                  <Button
+                    kind="ghost"
+                    disabled={originalTicket.status.approveSuccess}
+                    onClick={() => approveTicketHandler(originalTicket, true)}
+                  >
+                    {originalTicket.status.isApproved
+                      ? "Ticket Approved"
+                      : "Approve Ticket"}
+                  </Button>
+                  <Button
+                    kind="ghost"
+                    disabled={originalTicket.status.approveSuccess}
+                    onClick={() => approveTicketHandler(originalTicket, false)}
+                  >
+                    Send Back to Review
+                  </Button>
                 </div>
               ),
               userName: item?.createdFor
@@ -164,7 +179,14 @@ const TicketDataTable = ({
 
       return modifiedTickets;
     },
-    [users, openEditModal, selectTicket, reviewTicketHandler, sendToReview]
+    [
+      users,
+      openEditModal,
+      selectTicket,
+      reviewTicketHandler,
+      sendToReview,
+      approveTicketHandler,
+    ]
   );
 
   const getEmptyDataTable = useCallback(() => {
@@ -295,6 +317,7 @@ TicketDataTable.propTypes = {
   openDetailsModal: PropTypes.func,
   reviewTicketHandler: PropTypes.func,
   sendToReview: PropTypes.func,
+  approveTicketHandler: PropTypes.func,
 };
 
 export default TicketDataTable;

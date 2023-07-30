@@ -38,8 +38,51 @@ const TicketPage = () => {
     }
   }, [sessionUser?.role]);
 
-  function reviewHandler(ticket, reviewTicket) {
-    if (reviewTicket) {
+  // Approve Handler
+  function approveHandler(ticket, isTicketApproved) {
+    if (isTicketApproved) {
+      const updatedTicket = {
+        ...ticket,
+        status: {
+          ...ticket.status,
+          type: "Approved",
+          isApproved: true,
+          approveSuccess: true,
+        },
+      };
+
+      editTicket(updatedTicket, (err, ticket) => {
+        if (err) {
+          return;
+        }
+        setSelectedTicket(ticket);
+      });
+    } else {
+      const updatedTicket = {
+        ...ticket,
+        status: {
+          ...ticket.status,
+          type: "Re-review requested",
+          isReviewed: false,
+          reviewSuccess: false,
+          sendToApproval: false,
+          isApproved: false,
+          approveSuccess: false,
+        },
+      };
+
+      editTicket(updatedTicket, (err, ticket) => {
+        if (err) {
+          return;
+        }
+        setSelectedTicket(ticket);
+      });
+    }
+  }
+
+  // Review Handler
+  function reviewHandler(ticket, isTicketReviewed) {
+    if (isTicketReviewed) {
       const updatedTicket = {
         ...ticket,
         status: {
@@ -63,7 +106,7 @@ const TicketPage = () => {
           ...ticket.status,
           type: "Edit requested",
           sendToReview: false,
-          isReviewed: true,
+          isReviewed: false,
           reviewSuccess: false,
         },
       };
@@ -76,6 +119,7 @@ const TicketPage = () => {
     }
   }
 
+  // When user sends to review
   function sendToReviewHandler(ticket) {
     const updatedTicket = {
       ...ticket,
@@ -112,6 +156,7 @@ const TicketPage = () => {
             openDetailsModal={setDetailsModalOpen}
             reviewTicketHandler={reviewHandler}
             sendToReview={sendToReviewHandler}
+            approveTicketHandler={approveHandler}
           />
         </Column>
       </Grid>
