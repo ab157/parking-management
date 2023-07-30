@@ -37,10 +37,9 @@ const TicketDataTable = ({
   approveTicketHandler,
 }) => {
   const [formattedTickets, setFormattedTickets] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const { user: sessionUser } = useContext(AuthContext);
-  const pageSize = 5;
 
+  // For Details Modal
   const handleTicketClick = useCallback(
     (ticketId) => {
       const ticket = tickets.filter((item) => item.id === ticketId)[0];
@@ -50,9 +49,11 @@ const TicketDataTable = ({
     [tickets, selectTicket, openDetailsModal]
   );
 
+  // Formatting Tickets for Data Table
   const formatTickets = useCallback(
     (tickets, user) => {
       let modifiedTickets = [];
+      // Common fields in modified tickets
       modifiedTickets = tickets.map((item) => {
         return {
           ...item,
@@ -75,6 +76,7 @@ const TicketDataTable = ({
               {item.status.type}
             </Tag>
           ),
+          // User actions
           actions: !item.status.isApproved && (
             <div>
               <Button
@@ -97,15 +99,18 @@ const TicketDataTable = ({
         };
       });
 
+      // If Role is USER
       if (user?.role === "USER") {
         return modifiedTickets.filter(
           (item) => item.createdBy.userId === user.id
         );
       }
 
+      // If Role is Reviewer
       if (user?.role === "REVIEWER") {
         modifiedTickets = modifiedTickets.map((item) => {
           const user = users.find((user) => user.id === item.createdBy.userId);
+          // To retrieve original ticket
           const originalTicket = tickets.find(
             (ticket) => ticket.id === item.id
           );
@@ -141,6 +146,7 @@ const TicketDataTable = ({
         });
       }
 
+      // If Role is Admin
       if (user?.role === "ADMIN") {
         modifiedTickets = modifiedTickets.map((item) => {
           const user = users.find((user) => user.id === item.createdBy.userId);
@@ -190,6 +196,7 @@ const TicketDataTable = ({
     ]
   );
 
+  // For Empty data table
   const getEmptyDataTable = useCallback(() => {
     return {
       id: "",
@@ -224,6 +231,7 @@ const TicketDataTable = ({
     };
   }, [openCreateModal, sessionUser?.role]);
 
+  // For setting formatted ticket on page load
   useEffect(() => {
     const ticketsFormatted = formatTickets(tickets, sessionUser);
     if (ticketsFormatted.length !== 0) {
@@ -298,17 +306,11 @@ const TicketDataTable = ({
           )}
         </DataTable>
       )}
-      {/* <Pagination
-        page={currentPage}
-        pageSize={pageSize}
-        pageSizes={[5, 10, 20, 40, 50]}
-        itemsPerPageText="Items per page:"
-        totalItems={formattedTickets.length}
-      /> */}
     </div>
   );
 };
 
+// Prop validation for TicketDataTable
 TicketDataTable.propTypes = {
   tickets: PropTypes.array,
   users: PropTypes.array,

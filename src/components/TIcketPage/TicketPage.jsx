@@ -20,6 +20,7 @@ const TicketPage = () => {
   const [parkingSlots, setParkingSlots] = useState([]);
   const { user: sessionUser } = useContext(AuthContext);
 
+  // Get all tickets on page load
   useEffect(() => {
     getTickets((err, tickets) => {
       if (err) {
@@ -29,6 +30,7 @@ const TicketPage = () => {
     });
   }, [createModalOpen, editModalOpen, selectedTicket]);
 
+  // If Role is ADMIN or REVIEWER, get all users
   useEffect(() => {
     if (sessionUser?.role === "ADMIN" || sessionUser?.role === "REVIEWER") {
       getAllUsers((err, users) => {
@@ -38,6 +40,7 @@ const TicketPage = () => {
     }
   }, [sessionUser?.role]);
 
+  // To get list of pre-occupied parking slots
   useEffect(() => {
     const slotsArray = tickets.map((ticket) => {
       return {
@@ -147,6 +150,7 @@ const TicketPage = () => {
       if (err) {
         return;
       }
+      // Setting tickets to re-run useEffect that calls getTickets method to update page
       setSelectedTicket(t);
     });
   }
