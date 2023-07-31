@@ -1,5 +1,27 @@
 {
-  "tickets": [],
+  "tickets": [
+    {
+      "id": "161cfd57-0fc8-42b7-99dd-6f42984e16aa",
+      "carNo": "MH12AV3333",
+      "parkingFrom": "2023-07-30T18:30:00.000Z",
+      "timeFrom": 1690777800000,
+      "parkingTo": "2023-07-30T18:30:00.000Z",
+      "timeTill": 1690810200000,
+      "parkingSlot": "P1D",
+      "createdBy": {
+        "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
+      },
+      "status": {
+        "type": "Under Review",
+        "sendToReview": true,
+        "isReviewed": false,
+        "reviewSuccess": null,
+        "sendToApproval": false,
+        "isApproved": false,
+        "approveSuccess": null
+      }
+    }
+  ],
   "users": [
     {
       "id": "0c8ccff7-71c9-4447-bcef-1d4910019b93",

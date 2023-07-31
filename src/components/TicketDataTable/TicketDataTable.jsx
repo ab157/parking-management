@@ -179,33 +179,34 @@ const TicketDataTable = ({
           if (user) {
             return {
               ...item,
-              actions: !originalTicket.status.isApproved && (
-                <div>
-                  <Button
-                    kind="ghost"
-                    disabled={originalTicket.status.approveSuccess}
-                    onClick={() => approveTicketHandler(originalTicket, true)}
-                  >
-                    {originalTicket.status.isApproved
-                      ? "Ticket Approved"
-                      : originalTicket.status.isReviewed
-                      ? "Approve Ticket"
-                      : "Review and Approve Ticket"}
-                  </Button>
-                  {user.email === sessionUser.email && (
+              actions: !originalTicket.status.isApproved &&
+                originalTicket.status.sendToReview && (
+                  <div>
                     <Button
                       kind="ghost"
-                      disabled={originalTicket.status.isReviewed}
-                      onClick={() => {
-                        selectTicket(originalTicket);
-                        openEditModal(true);
-                      }}
+                      disabled={originalTicket.status.approveSuccess}
+                      onClick={() => approveTicketHandler(originalTicket, true)}
                     >
-                      <Edit />
+                      {originalTicket.status.isApproved
+                        ? "Ticket Approved"
+                        : originalTicket.status.isReviewed
+                        ? "Approve Ticket"
+                        : "Review and Approve Ticket"}
                     </Button>
-                  )}
-                </div>
-              ),
+                    {user.email === sessionUser.email && (
+                      <Button
+                        kind="ghost"
+                        disabled={originalTicket.status.isReviewed}
+                        onClick={() => {
+                          selectTicket(originalTicket);
+                          openEditModal(true);
+                        }}
+                      >
+                        <Edit />
+                      </Button>
+                    )}
+                  </div>
+                ),
               userName: item?.createdFor
                 ? `${item?.createdFor?.name}`
                 : `${user?.first_name} ${user?.last_name}`,
@@ -223,6 +224,7 @@ const TicketDataTable = ({
       reviewTicketHandler,
       sendToReview,
       approveTicketHandler,
+      sessionUser.email,
     ]
   );
 
