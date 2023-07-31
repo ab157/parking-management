@@ -16,7 +16,6 @@ import {
   TableToolbarContent,
   TableToolbarSearch,
   Link,
-  Pagination,
   Tag,
 } from "@carbon/react";
 import { Edit, Add } from "@carbon/icons-react";
@@ -39,7 +38,6 @@ const TicketDataTable = ({
   const [formattedTickets, setFormattedTickets] = useState([]);
   const { user: sessionUser } = useContext(AuthContext);
 
-  // For Details Modal
   const handleTicketClick = useCallback(
     (ticketId) => {
       const ticket = tickets.filter((item) => item.id === ticketId)[0];
@@ -49,11 +47,9 @@ const TicketDataTable = ({
     [tickets, selectTicket, openDetailsModal]
   );
 
-  // Formatting Tickets for Data Table
   const formatTickets = useCallback(
     (tickets, user) => {
       let modifiedTickets = [];
-      // Common fields in modified tickets
       modifiedTickets = tickets.map((item) => {
         return {
           ...item,
@@ -76,7 +72,6 @@ const TicketDataTable = ({
               {item.status.type}
             </Tag>
           ),
-          // User actions
           actions: !item.status.isApproved && (
             <div>
               <Button
@@ -99,43 +94,72 @@ const TicketDataTable = ({
         };
       });
 
-      // If Role is USER
       if (user?.role === "USER") {
         return modifiedTickets.filter(
           (item) => item.createdBy.userId === user.id
         );
       }
 
-      // If Role is Reviewer
       if (user?.role === "REVIEWER") {
         modifiedTickets = modifiedTickets.map((item) => {
           const user = users.find((user) => user.id === item.createdBy.userId);
-          // To retrieve original ticket
           const originalTicket = tickets.find(
             (ticket) => ticket.id === item.id
           );
           if (user) {
             return {
               ...item,
-              actions: originalTicket.status.sendToReview && (
+              actions: !originalTicket.status.isApproved && (
                 <div>
-                  <Button
-                    kind="ghost"
-                    disabled={originalTicket.status.reviewSuccess}
-                    onClick={() => reviewTicketHandler(originalTicket, true)}
-                  >
-                    {originalTicket.status.isReviewed
-                      ? "Reviewed"
-                      : "Mark as Review"}
-                  </Button>
+                  {originalTicket.status.sendToReview && (
+                    <>
+                      <Button
+                        kind="ghost"
+                        disabled={originalTicket.status.reviewSuccess}
+                        onClick={() =>
+                          reviewTicketHandler(originalTicket, true)
+                        }
+                      >
+                        {originalTicket.status.isReviewed
+                          ? "Reviewed"
+                          : "Mark as Review"}
+                      </Button>
 
-                  <Button
-                    kind="ghost"
-                    disabled={originalTicket.status.reviewSuccess}
-                    onClick={() => reviewTicketHandler(originalTicket, false)}
-                  >
-                    Send Back to Edit
-                  </Button>
+                      {!originalTicket.status.isReviewed && (
+                        <Button
+                          kind="ghost"
+                          disabled={originalTicket.status.reviewSuccess}
+                          onClick={() =>
+                            reviewTicketHandler(originalTicket, false)
+                          }
+                        >
+                          Send Back to Edit
+                        </Button>
+                      )}
+                    </>
+                  )}
+                  {!originalTicket.status.sendToReview &&
+                    user.email === sessionUser.email && (
+                      <>
+                        <Button
+                          kind="ghost"
+                          disabled={originalTicket.status.sendToReview}
+                          onClick={() => {
+                            selectTicket(originalTicket);
+                            openEditModal(true);
+                          }}
+                        >
+                          <Edit />
+                        </Button>
+
+                        <Button
+                          kind="ghost"
+                          onClick={() => sendToReview(originalTicket)}
+                        >
+                          Send To Review
+                        </Button>
+                      </>
+                    )}
                 </div>
               ),
               userName: item?.createdFor
@@ -146,7 +170,6 @@ const TicketDataTable = ({
         });
       }
 
-      // If Role is Admin
       if (user?.role === "ADMIN") {
         modifiedTickets = modifiedTickets.map((item) => {
           const user = users.find((user) => user.id === item.createdBy.userId);
@@ -156,7 +179,7 @@ const TicketDataTable = ({
           if (user) {
             return {
               ...item,
-              actions: originalTicket.status.sendToApproval && (
+              actions: !originalTicket.status.isApproved && (
                 <div>
                   <Button
                     kind="ghost"
@@ -165,15 +188,22 @@ const TicketDataTable = ({
                   >
                     {originalTicket.status.isApproved
                       ? "Ticket Approved"
-                      : "Approve Ticket"}
+                      : originalTicket.status.isReviewed
+                      ? "Approve Ticket"
+                      : "Review and Approve Ticket"}
                   </Button>
-                  <Button
-                    kind="ghost"
-                    disabled={originalTicket.status.approveSuccess}
-                    onClick={() => approveTicketHandler(originalTicket, false)}
-                  >
-                    Send Back to Review
-                  </Button>
+                  {user.email === sessionUser.email && (
+                    <Button
+                      kind="ghost"
+                      disabled={originalTicket.status.isReviewed}
+                      onClick={() => {
+                        selectTicket(originalTicket);
+                        openEditModal(true);
+                      }}
+                    >
+                      <Edit />
+                    </Button>
+                  )}
                 </div>
               ),
               userName: item?.createdFor
@@ -196,7 +226,6 @@ const TicketDataTable = ({
     ]
   );
 
-  // For Empty data table
   const getEmptyDataTable = useCallback(() => {
     return {
       id: "",
@@ -204,21 +233,13 @@ const TicketDataTable = ({
         <NoDataEmptyState
           size="lg"
           className="tickets_noDataState"
-          action={
-            sessionUser?.role === "USER" && {
-              onClick: () => openCreateModal(true),
-              renderIcon: Add,
-              iconDescription: "Add icon",
-              text: "Create Ticket",
-            }
-          }
-          subtitle={
-            sessionUser?.role === "USER"
-              ? "Create new Ticket"
-              : sessionUser?.role === "REVIEWER"
-              ? ""
-              : ""
-          }
+          action={{
+            onClick: () => openCreateModal(true),
+            renderIcon: Add,
+            iconDescription: "Add icon",
+            text: "Create Ticket",
+          }}
+          subtitle={"Create new Ticket"}
           title="No Ticket"
         />
       ),
@@ -229,9 +250,8 @@ const TicketDataTable = ({
       parkingSlot: "",
       actions: "",
     };
-  }, [openCreateModal, sessionUser?.role]);
+  }, [openCreateModal]);
 
-  // For setting formatted ticket on page load
   useEffect(() => {
     const ticketsFormatted = formatTickets(tickets, sessionUser);
     if (ticketsFormatted.length !== 0) {
@@ -264,11 +284,10 @@ const TicketDataTable = ({
                     onChange={(evt) => onInputChange(evt)}
                     disabled={!tickets.length}
                   />
-                  {sessionUser?.role === "USER" && (
-                    <Button onClick={() => openCreateModal(true)}>
-                      Create Ticket
-                    </Button>
-                  )}
+
+                  <Button onClick={() => openCreateModal(true)}>
+                    Create Ticket
+                  </Button>
                 </TableToolbarContent>
               </TableToolbar>
               <Table {...getTableProps()}>
@@ -310,7 +329,6 @@ const TicketDataTable = ({
   );
 };
 
-// Prop validation for TicketDataTable
 TicketDataTable.propTypes = {
   tickets: PropTypes.array,
   users: PropTypes.array,

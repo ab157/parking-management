@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
 
-// To get all tickets
 export const getTickets = async (cb) => {
   try {
     const res = await fetch("http://localhost:3031/tickets");
@@ -12,7 +11,6 @@ export const getTickets = async (cb) => {
   }
 };
 
-// To create new ticket
 export const createNewTicket = async (ticket, cb) => {
   const newTicket = {
     id: uuidv4(),
@@ -32,7 +30,6 @@ export const createNewTicket = async (ticket, cb) => {
   }
 };
 
-// To edit ticket
 export const editTicket = async (updatedTicket, cb) => {
   try {
     await fetch(`http://localhost:3031/tickets/${updatedTicket.id}`, {

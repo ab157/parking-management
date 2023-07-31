@@ -28,7 +28,7 @@ const LoginForm = () => {
         setError(err?.message);
         return;
       }
-      // If no error in login, then proceed
+
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
       setTimeout(() => {

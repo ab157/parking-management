@@ -20,7 +20,6 @@ const TicketPage = () => {
   const [parkingSlots, setParkingSlots] = useState([]);
   const { user: sessionUser } = useContext(AuthContext);
 
-  // Get all tickets on page load
   useEffect(() => {
     getTickets((err, tickets) => {
       if (err) {
@@ -30,7 +29,6 @@ const TicketPage = () => {
     });
   }, [createModalOpen, editModalOpen, selectedTicket]);
 
-  // If Role is ADMIN or REVIEWER, get all users
   useEffect(() => {
     if (sessionUser?.role === "ADMIN" || sessionUser?.role === "REVIEWER") {
       getAllUsers((err, users) => {
@@ -40,7 +38,6 @@ const TicketPage = () => {
     }
   }, [sessionUser?.role]);
 
-  // To get list of pre-occupied parking slots
   useEffect(() => {
     const slotsArray = tickets.map((ticket) => {
       return {
@@ -53,7 +50,6 @@ const TicketPage = () => {
     setParkingSlots(slotsArray);
   }, [tickets]);
 
-  // Approve Handler
   function approveHandler(ticket, isTicketApproved) {
     if (isTicketApproved) {
       const updatedTicket = {
@@ -61,6 +57,10 @@ const TicketPage = () => {
         status: {
           ...ticket.status,
           type: "Approved",
+          sendToReview: true,
+          isReviewed: true,
+          reviewSuccess: true,
+          sendToApproval: true,
           isApproved: true,
           approveSuccess: true,
         },
@@ -95,7 +95,6 @@ const TicketPage = () => {
     }
   }
 
-  // Review Handler
   function reviewHandler(ticket, isTicketReviewed) {
     if (isTicketReviewed) {
       const updatedTicket = {
@@ -134,7 +133,6 @@ const TicketPage = () => {
     }
   }
 
-  // When user sends to review
   function sendToReviewHandler(ticket) {
     const updatedTicket = {
       ...ticket,
@@ -150,7 +148,7 @@ const TicketPage = () => {
       if (err) {
         return;
       }
-      // Setting tickets to re-run useEffect that calls getTickets method to update page
+
       setSelectedTicket(t);
     });
   }

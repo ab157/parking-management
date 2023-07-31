@@ -14,7 +14,6 @@ import {
 } from "@carbon/react";
 import { AuthContext } from "../../context/AuthContext";
 import { createNewTicket, parkingSlots } from "../../utils/tickets";
-// CSS
 import "./CreateTicketModal.scss";
 import { convertTimeStringToTimeStamp } from "../../utils/formatDate";
 
@@ -29,7 +28,6 @@ export const CreateTicketModal = ({ isOpen, onClose, occupiedSlots }) => {
   const [userName, setUserName] = useState("");
   const { user: sessionUser } = useContext(AuthContext);
   const [error, setError] = useState("");
-  // State to maintain actual time with AMPM
   const [timeFrom, setTimeFrom] = useState("");
   const [timeTill, setTimeTill] = useState("");
 
@@ -74,15 +72,26 @@ export const CreateTicketModal = ({ isOpen, onClose, occupiedSlots }) => {
       createdBy: {
         userId: sessionUser?.id,
       },
-      status: {
-        type: "Ready for Review",
-        sendToReview: false,
-        isReviewed: false,
-        reviewSuccess: null,
-        sendToApproval: false,
-        isApproved: false,
-        approveSuccess: null,
-      },
+      status:
+        sessionUser?.role === "USER"
+          ? {
+              type: "Ready for Review",
+              sendToReview: false,
+              isReviewed: false,
+              reviewSuccess: null,
+              sendToApproval: false,
+              isApproved: false,
+              approveSuccess: null,
+            }
+          : {
+              type: "Under Review",
+              sendToReview: true,
+              isReviewed: false,
+              reviewSuccess: null,
+              sendToApproval: false,
+              isApproved: false,
+              approveSuccess: null,
+            },
     };
     if (forWhom !== "self") {
       ticket = {
