@@ -77,7 +77,7 @@ const TicketPage = () => {
         ...ticket,
         status: {
           ...ticket.status,
-          type: "Re-review requested",
+          type: "Re-review Requested",
           isReviewed: false,
           reviewSuccess: false,
           sendToApproval: false,
@@ -118,7 +118,7 @@ const TicketPage = () => {
         ...ticket,
         status: {
           ...ticket.status,
-          type: "Edit requested",
+          type: "Edit Requested",
           sendToReview: false,
           isReviewed: false,
           reviewSuccess: false,

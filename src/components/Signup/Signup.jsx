@@ -138,7 +138,7 @@ const SignupForm = () => {
         invalid={!isPassword}
         invalidText={
           !isPassword &&
-          "The password should contain an Uppercase Alphabet , Lowecase Alphabet, a Special Character and Number(s)"
+          "The password should contain an Uppercase Alphabet , Lowercase Alphabet, a Special Character and Number(s)"
         }
       />
       <PasswordInput
