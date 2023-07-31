@@ -12,13 +12,13 @@
         "userId": "77589e97-b3aa-4e03-822c-70c2aa4a4546"
       },
       "status": {
-        "type": "Under Review",
+        "type": "Approved",
         "sendToReview": true,
-        "isReviewed": false,
-        "reviewSuccess": null,
-        "sendToApproval": false,
-        "isApproved": false,
-        "approveSuccess": null
+        "isReviewed": true,
+        "reviewSuccess": true,
+        "sendToApproval": true,
+        "isApproved": true,
+        "approveSuccess": true
       }
     }
   ],
